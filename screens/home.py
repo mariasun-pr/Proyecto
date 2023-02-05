@@ -12,7 +12,7 @@ class Home(tk.Frame):
         #self.init_widgets()
 
     def move_to_importar(self):
-        self.controller.show_frame(Importar)
+        self.controller.show_frame(Importar, False)
 
     def init_widgets(self):
         tk.Label(

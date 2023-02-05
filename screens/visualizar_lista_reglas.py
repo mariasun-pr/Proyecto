@@ -1,4 +1,5 @@
 import tkinter as tk
+import sys
 from tkinter import filedialog
 from constantes import style
 from screens.regla_screen import *
@@ -9,13 +10,27 @@ class VisualizarReglas(tk.Frame):
         self.configure(background=style.COLOR_BACKGROUND)
         self.controller = controller
         self.reglas = controller.reglas
+        self.canvas = tk.Canvas
+
+        self.hecho=False
 
     
     def setReglas(self, reglas):
         self.reglas = reglas
 
     def move_to_regla(self):
-        self.controller.show_frame(VisualizarInfoRegla)
+        self.controller.show_frame(VisualizarInfoRegla, self.hecho)
+        if(not self.hecho):
+            self.hecho=True
+
+    def movement_mouse_wheel(self,event):
+        if sys.platform == 'darwin': # for OS X # also, if platform.system() == 'Darwin':
+            delta = event.delta
+        else:                            # for Windows, Linux
+            delta = -event.delta // 120   # event.delta is some multiple of 120
+        
+        self.canvas.yview_scroll(delta, "units")
+    
 
     
     def init_widgets(self):
@@ -26,54 +41,63 @@ class VisualizarReglas(tk.Frame):
             fill=tk.X,
             padx=20,
             pady=11,
-            expand=True    
+   
         )
         tk.Button(
             inicioFrame,
             text=" ← Atrás",
             command= lambda: self.controller.get_frame("Importar"),
             **style.STYLE_BUTTON,
-            font=("Arial",12)
+            font=("Arial",13)
         ).pack(
             side = tk.LEFT,
             padx=20,
+            pady=11, 
         )
         tk.Label(
             inicioFrame, 
-            text="Selecciona la regla para ver más información",
+            text="Selecciona una regla para ver más información",
             justify=tk.CENTER,
             **style.STYLE #Desenpaqueta STYLE,
         ).pack(
             fill=tk.X,
             padx=20,
             pady=11,  
-            side=tk.LEFT 
+            side=tk.LEFT, 
         )
         
-        reglasFrame = tk.Frame(inicioFrame)
+        reglasFrame = tk.Frame(self)
         reglasFrame.configure(background=style.COLOR_BACKGROUND,)
         reglasFrame.pack(
-            #side = tk.LEFT,
+            side = tk.TOP,
             fill=tk.BOTH,
             padx=20,
-            pady=11,  
-            expand= 1  
+            #pady=11,  
+            expand= 1,
+
         )
 
-        canvas = tk.Canvas(reglasFrame)
+        self.canvas = tk.Canvas(reglasFrame)
 
-        scrollbar = tk.Scrollbar(reglasFrame, orient=tk.VERTICAL, command=canvas.yview)
+        scrollbar = tk.Scrollbar(reglasFrame, orient=tk.VERTICAL, command=self.canvas.yview)
 
-        canvas.configure(yscrollcommand=scrollbar.set)
-        canvas.bind('<Configure>', lambda e: canvas.configure(scrollregion= canvas.bbox(tk.ALL)))
+        self.canvas.configure(yscrollcommand=scrollbar.set, background=style.COLOR_BACKGROUND, borderwidth=0, highlightthickness=0)
+        self.canvas.bind('<Configure>', lambda e: self.canvas.configure(scrollregion= self.canvas.bbox(tk.ALL)))
 
-        frame_canvas=tk.Frame(canvas)
-        canvas.create_window((0,0),window=frame_canvas,anchor=tk.NW)
+        frame_canvas=tk.Frame(self.canvas)
+        frame_canvas.configure(background=style.COLOR_BACKGROUND)
+        self.canvas.create_window((0,0),window=frame_canvas,anchor=tk.NW)
+ 
 
-        canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
+        #Para que funcione el scroll con la rueda del ratón en cualquier SO
+        self.canvas.bind("<MouseWheel>", self.movement_mouse_wheel)
+        self.canvas.bind("<Button-4>", self.movement_mouse_wheel)
+        self.canvas.bind("<Button-5>", self.movement_mouse_wheel)
+
+        self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 
-        #reglasFrame.config(yscrollcommand=scrollbar.set)
+
 
 
         print(self.controller.reglas)

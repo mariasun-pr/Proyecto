@@ -27,18 +27,20 @@ class Manager(tk.Tk):
         self.frames = {} #Diccionario de clase
         for F in (Home, Importar, VisualizarReglas, VisualizarInfoRegla): #Modificar aquí para añadir pantallas
             frame = F(container, self)
-            frame.init_widgets()
+            #frame.init_widgets()
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky=tk.NSEW) 
-        self.show_frame(Home)
+        self.show_frame(Home, False)
 
-    def show_frame(self, container):
+    def show_frame(self, container, hecho):
         frame = self.frames[container]
+        if(not hecho):
+            frame.init_widgets()
         frame.tkraise()
        # self.container.update()
     
     def get_frame(self, nombreVentana):
         if nombreVentana == "Importar":
-            self.show_frame(Importar)
+            self.show_frame(Importar, True)
         elif nombreVentana == "VisualizarReglas":
-            return self.frames[VisualizarReglas]
+            self.show_frame(VisualizarReglas, True)

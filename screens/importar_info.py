@@ -9,7 +9,7 @@ class Importar(tk.Frame):
         super().__init__(parent)
         self.configure(background=style.COLOR_BACKGROUND)
         self.controller = controller
-        self.filenameDatos = tk.StringVar(self,"ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ")
+        self.filenameDatos = tk.StringVar(self,"ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ")
         self.filenameReglas = tk.StringVar(self,"ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ")
         self.botonSiguiente = tk.Button(
                                 self,
@@ -19,18 +19,21 @@ class Importar(tk.Frame):
                                 font=style.FONT_BUTTON,
                                 state= tk.DISABLED,
                             )
+        self.hecho=False
 
         #self.init_widgets()
 
     def move_to_visualizarReglas(self):
-        self.controller.show_frame(VisualizarReglas)
+        self.controller.show_frame(VisualizarReglas, self.hecho)
+        if(not self.hecho):
+            self.hecho=True
     
     def importarDatos(self):
         nombreFichero = tk.filedialog.askopenfilename()
         self.filenameDatos.set(nombreFichero)
         print('Selected:', self.filenameDatos.get)
         self.leerFichero(nombreFichero)
-        if self.filenameReglas.get() != "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ" and self.filenameReglas.get() != "" :
+        if self.filenameReglas.get() != "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ" and self.filenameReglas.get() != "" :
             self.botonSiguiente.config(state=tk.NORMAL)
 
     def importarReglas(self):
@@ -38,7 +41,7 @@ class Importar(tk.Frame):
         self.filenameReglas.set(nombreFichero)
         print('Selected:', self.filenameReglas.get)
         
-        if self.filenameDatos.get() != "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ" and self.filenameDatos.get() != "":
+        if self.filenameDatos.get() != "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ" and self.filenameDatos.get() != "":
             self.botonSiguiente.config(state=tk.NORMAL)
 
         self.controller.reglas=self.leerFichero(nombreFichero)
