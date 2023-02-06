@@ -18,10 +18,12 @@ class VisualizarReglas(tk.Frame):
     def setReglas(self, reglas):
         self.reglas = reglas
 
-    def move_to_regla(self):
-        self.controller.show_frame(VisualizarInfoRegla, self.hecho)
+    def move_to_regla(self,regla):
+        self.controller.nombre_regla_a_mostrar=regla
+        self.controller.show_frame(VisualizarInfoRegla, False)
         if(not self.hecho):
             self.hecho=True
+
 
     def movement_mouse_wheel(self,event):
         if sys.platform == 'darwin': # for OS X # also, if platform.system() == 'Darwin':
@@ -105,7 +107,7 @@ class VisualizarReglas(tk.Frame):
             tk.Button(
                 frame_canvas,
                 text=regla,
-                command=self.move_to_regla,
+                command= lambda r = regla: self.move_to_regla(r),
                 **style.STYLE_BUTTON,
                 font=("Arial",14),
                 state= tk.NORMAL,

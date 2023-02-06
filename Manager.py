@@ -10,23 +10,25 @@ from screens.regla_screen import *
 class Manager(tk.Tk):
     
     reglas = ["jfjdf\n","jdfhjf\n","dfiuhiufh\n","dfiuhiufh\n","dfiuhiufh\n","dfiuhiufh\n","dfiuhiufh\n","dfiuhiufh\n","dfiuhiufh\n","dfiuhiufh\n","dfiuhiufh\n","dfiuhiufh\n","dfiuhiufh\n","dfiuhiufh\n","dfiuhiufh\n","dfiuhiufh\n","dfiuhiufh\n","dfiuhiufh\n","dfiuhiufh\n","dfiuhiufh\n","dfiuhiufh\n","dfiuhiufh\n"]
+    nombre_regla_a_mostrar = "Sin título"
+    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.title("Visualizador algoritmos SD")
         self.geometry("1000x500")
-        container = tk.Frame(self) #parent del home. Contiene los frames
-        container.pack(
+        self.container = tk.Frame(self) #parent del home. Contiene los frames
+        self.container.pack(
             side = tk.TOP,
             fill = tk.BOTH,
             expand=True
         )
-        container.configure(background=style.COLOR_BACKGROUND)
-        container.grid_columnconfigure (0,weight=1) #Se está definiendo que el container tenga una sola fila y una sola columna
-        container.grid_rowconfigure(0,weight=1)#El peso lo que ocupa la columna respecto el otro
+        self.container.configure(background=style.COLOR_BACKGROUND)
+        self.container.grid_columnconfigure (0,weight=1) #Se está definiendo que el container tenga una sola fila y una sola columna
+        self.container.grid_rowconfigure(0,weight=1)#El peso lo que ocupa la columna respecto el otro
 
         self.frames = {} #Diccionario de clase
         for F in (Home, Importar, VisualizarReglas, VisualizarInfoRegla): #Modificar aquí para añadir pantallas
-            frame = F(container, self)
+            frame = F(self.container, self)
             #frame.init_widgets()
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky=tk.NSEW) 
@@ -43,4 +45,8 @@ class Manager(tk.Tk):
         if nombreVentana == "Importar":
             self.show_frame(Importar, True)
         elif nombreVentana == "VisualizarReglas":
+            self.frames[VisualizarInfoRegla].destroy()
+            frame = VisualizarInfoRegla(self.container, self)
+            self.frames[VisualizarInfoRegla] = frame
+            frame.grid(row=0, column=0, sticky=tk.NSEW)
             self.show_frame(VisualizarReglas, True)

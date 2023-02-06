@@ -24,6 +24,7 @@ class VisualizarInfoRegla(tk.Frame):
             pady=11,
    
         )
+
         tk.Button(
             inicioFrame,
             text=" ← Atrás",
@@ -35,3 +36,16 @@ class VisualizarInfoRegla(tk.Frame):
             padx=20,
             pady=11, 
         )
+        tk.Label(
+            inicioFrame, 
+            #text=self.controller.nombre_regla_a_mostrar,
+            text= self.controller.nombre_regla_a_mostrar,
+            justify=tk.CENTER,
+            **style.STYLE #Desenpaqueta STYLE,
+        ).pack(
+            fill=tk.X,
+            padx=20,
+            pady=11,  
+            side=tk.LEFT, 
+        )
+        self.controller.nombre_regla_a_mostrar="Sin título"
