@@ -9,8 +9,8 @@ class Importar(tk.Frame):
         super().__init__(parent)
         self.configure(background=style.COLOR_BACKGROUND)
         self.controller = controller
-        self.filenameDatos = tk.StringVar(self,"ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ")
-        self.filenameReglas = tk.StringVar(self,"ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ")
+        self.filenameDatos = tk.StringVar(self,"ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ")
+        self.filenameReglas = tk.StringVar(self,"ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ")
         self.botonSiguiente = tk.Button(
                                 self,
                                 text="Siguiente →",
@@ -24,7 +24,7 @@ class Importar(tk.Frame):
         #self.init_widgets()
 
     def move_to_visualizarReglas(self):
-        self.controller.show_frame(VisualizarReglas, self.hecho)
+        self.controller.show_frame(VisualizarReglas, False)
         if(not self.hecho):
             self.hecho=True
     
@@ -33,7 +33,7 @@ class Importar(tk.Frame):
         self.filenameDatos.set(nombreFichero)
         print('Selected:', self.filenameDatos.get)
         self.leerFichero(nombreFichero)
-        if self.filenameReglas.get() != "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ" and self.filenameReglas.get() != "" :
+        if self.filenameReglas.get() != "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ" and self.filenameReglas.get() != "" :
             self.botonSiguiente.config(state=tk.NORMAL)
 
     def importarReglas(self):
@@ -41,11 +41,10 @@ class Importar(tk.Frame):
         self.filenameReglas.set(nombreFichero)
         print('Selected:', self.filenameReglas.get)
         
-        if self.filenameDatos.get() != "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ" and self.filenameDatos.get() != "":
+        if self.filenameDatos.get() != "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ" and self.filenameDatos.get() != "":
             self.botonSiguiente.config(state=tk.NORMAL)
 
         self.controller.reglas=self.leerFichero(nombreFichero)
-
 
     def init_widgets(self):
         tk.Label(
@@ -66,7 +65,7 @@ class Importar(tk.Frame):
             side = tk.TOP,
             fill=tk.X,
             padx=20,
-            pady=11,    
+            pady=11,   
         )
         tk.Label(
             datosFrame,
@@ -77,7 +76,8 @@ class Importar(tk.Frame):
             side = tk.LEFT,
             padx=20,
             pady=11, 
-            fill=tk.X, 
+            fill=tk.X,
+
         )
         tk.Button(
             datosFrame,
@@ -121,7 +121,7 @@ class Importar(tk.Frame):
         )
 
         #Botón siguiente
-        if self.filenameDatos.get() != "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ" and self.filenameReglas.get() != "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ":
+        if self.filenameDatos.get() != "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ" and self.filenameReglas.get() != "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ":
             self.estadoBoton = tk.NORMAL
         self.botonSiguiente.pack(
             side=tk.TOP,

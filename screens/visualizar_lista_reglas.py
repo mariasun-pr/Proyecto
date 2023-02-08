@@ -18,8 +18,8 @@ class VisualizarReglas(tk.Frame):
     def setReglas(self, reglas):
         self.reglas = reglas
 
-    def move_to_regla(self,regla):
-        self.controller.nombre_regla_a_mostrar=regla
+    def move_to_regla(self, regla):
+        self.controller.nombre_regla_a_mostrar.set(regla)
         self.controller.show_frame(VisualizarInfoRegla, False)
         if(not self.hecho):
             self.hecho=True
@@ -96,9 +96,8 @@ class VisualizarReglas(tk.Frame):
         self.canvas.bind("<Button-4>", self.movement_mouse_wheel)
         self.canvas.bind("<Button-5>", self.movement_mouse_wheel)
 
-        self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
+        self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=1, anchor=tk.N)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-
 
 
 
@@ -110,10 +109,12 @@ class VisualizarReglas(tk.Frame):
                 command= lambda r = regla: self.move_to_regla(r),
                 **style.STYLE_BUTTON,
                 font=("Arial",14),
-                state= tk.NORMAL,
+                justify=tk.LEFT,
             ).pack(
                 side = tk.TOP,
-                padx=20,
+                padx=10,
+                expand= True,
+                fill=tk.X 
             )
 
 

@@ -9,8 +9,8 @@ from screens.regla_screen import *
 
 class Manager(tk.Tk):
     
-    reglas = ["jfjdf\n","jdfhjf\n","dfiuhiufh\n","dfiuhiufh\n","dfiuhiufh\n","dfiuhiufh\n","dfiuhiufh\n","dfiuhiufh\n","dfiuhiufh\n","dfiuhiufh\n","dfiuhiufh\n","dfiuhiufh\n","dfiuhiufh\n","dfiuhiufh\n","dfiuhiufh\n","dfiuhiufh\n","dfiuhiufh\n","dfiuhiufh\n","dfiuhiufh\n","dfiuhiufh\n","dfiuhiufh\n","dfiuhiufh\n"]
-    nombre_regla_a_mostrar = "Sin título"
+    reglas = []
+    nombre_regla_a_mostrar = tk.StringVar
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -34,19 +34,28 @@ class Manager(tk.Tk):
             frame.grid(row=0, column=0, sticky=tk.NSEW) 
         self.show_frame(Home, False)
 
+        self.nombre_regla_a_mostrar = tk.StringVar(self)
+
     def show_frame(self, container, hecho):
         frame = self.frames[container]
         if(not hecho):
             frame.init_widgets()
         frame.tkraise()
-       # self.container.update()
+        # self.container.update()
     
     def get_frame(self, nombreVentana):
         if nombreVentana == "Importar":
+            self.frames[VisualizarReglas].destroy()
+            frame = VisualizarReglas(self.container, self)
+            self.frames[VisualizarReglas] = frame
+            frame.grid(row=0, column=0, sticky=tk.NSEW)
+
             self.show_frame(Importar, True)
+
         elif nombreVentana == "VisualizarReglas":
             self.frames[VisualizarInfoRegla].destroy()
             frame = VisualizarInfoRegla(self.container, self)
             self.frames[VisualizarInfoRegla] = frame
             frame.grid(row=0, column=0, sticky=tk.NSEW)
+            
             self.show_frame(VisualizarReglas, True)
