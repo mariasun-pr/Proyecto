@@ -1,7 +1,9 @@
 import tkinter as tk
+from tkinter import messagebox as MessageBox
 from tkinter import filedialog
 from constantes import style
 from screens.visualizar_lista_reglas import *
+from lectura_ficheros.dataset import *
 
 
 class Importar(tk.Frame):
@@ -32,7 +34,7 @@ class Importar(tk.Frame):
         nombreFichero = tk.filedialog.askopenfilename()
         self.filenameDatos.set(nombreFichero)
         print('Selected:', self.filenameDatos.get)
-        self.leerFichero(nombreFichero)
+        #self.leerFichero(nombreFichero)
         if self.filenameReglas.get() != "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ" and self.filenameReglas.get() != "" :
             self.botonSiguiente.config(state=tk.NORMAL)
 
@@ -45,6 +47,13 @@ class Importar(tk.Frame):
             self.botonSiguiente.config(state=tk.NORMAL)
 
         self.controller.reglas=self.leerFichero(nombreFichero)
+
+        leerDataset = lecturaDataset(self.filenameDatos.get(),"cn2") #TODO: Modificar el algoritmo de ejemplo por el que se lea del fichero de reglas.
+        if(not leerDataset.lecturaFichero()):
+            MessageBox.showerror("Error", "El algoritmo necesita el conjunto de datos discretizado")
+            self.botonSiguiente.config(state=tk.DISABLED)
+
+
 
     def init_widgets(self):
         tk.Label(

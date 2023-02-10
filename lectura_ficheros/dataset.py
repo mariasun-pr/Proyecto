@@ -51,9 +51,11 @@ class lecturaDataset:
 
                 #print(self.datos)
 
-
+        #Si la carga se ha producido correctamente
         return True
-                
+
+    
+
         
 
 
