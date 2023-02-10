@@ -132,8 +132,11 @@ class Importar(tk.Frame):
     def leerFichero(self, nombreFichero):
         fichero = open(nombreFichero)
         lineas = fichero.readlines()
-        print(lineas)
-        return lineas
+        datos = []
+        for linea in lineas:
+            datos.append(linea.strip('\n'))
+        print(datos)
+        return datos
 
 
 
