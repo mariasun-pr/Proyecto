@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox as MessageBox
 from tkinter import filedialog
-from constantes import style
+from utils import style
 from screens.visualizar_lista_reglas import *
 from lectura_ficheros.dataset import *
 

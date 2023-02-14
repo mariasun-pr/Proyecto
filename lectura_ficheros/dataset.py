@@ -1,5 +1,5 @@
 
-from constantes.utils import *
+from utils.constantes import *
 
 class lecturaDataset:
     def __init__(self, nombreFichero, algoritmo):
@@ -17,14 +17,13 @@ class lecturaDataset:
         almacenarDatos = False
 
         for i in range (len(lineas)):
-            #print (lineas[i])
             linea = lineas[i]
             linea = linea.rstrip()
 
             #Obtener clases del dataset
             if("@attribute" in lineas[i] and "@inputs" in lineas[i+1]):   
                 linea = linea.replace('class', '').replace('@attribute', '').replace('}', '').replace('{', '').replace(' ','')
-                clases = linea.split(',')#{x.replace('class', '').replace('@attribute', '').replace('}', '').replace('{', '') for x in lineas[i]}
+                clases = linea.split(',')
                 self.clases = clases
                 print(self.clases)
 
@@ -39,7 +38,7 @@ class lecturaDataset:
             #Obtener atributos del dataset
             elif("@inputs" in lineas[i]):
                 linea = linea.replace('@inputs ', '')
-                self.atributos = linea.split(',')
+                self.atributos = linea.split(', ')
 
                 print(self.atributos)
 

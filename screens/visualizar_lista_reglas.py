@@ -1,7 +1,7 @@
 import tkinter as tk
 import sys
 from tkinter import filedialog
-from constantes import style
+from utils import style
 from screens.regla_screen import *
 
 class VisualizarReglas(tk.Frame):

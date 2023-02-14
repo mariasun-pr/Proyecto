@@ -1,5 +1,5 @@
 import tkinter as tk
-from constantes import style
+from utils import style
 from screens.visualizar_lista_reglas import *
 from screens.importar_info import *
 from screens.home import *

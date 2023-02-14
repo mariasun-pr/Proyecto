@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog
-from constantes import style
+from utils import style
 from screens.visualizar_lista_reglas import *
 
 
