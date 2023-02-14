@@ -22,7 +22,7 @@ class lecturaDataset:
 
             #Obtener clases del dataset
             if("@attribute" in lineas[i] and "@inputs" in lineas[i+1]):   
-                linea = linea.replace('class', '').replace('@attribute', '').replace('}', '').replace('{', '').replace(' ','')
+                linea = linea.replace('class', '').replace('@attribute', '').replace('}', '').replace('{', '').replace(' ','').replace('Class', '')
                 clases = linea.split(',')
                 self.clases = clases
                 print(self.clases)
