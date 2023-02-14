@@ -35,8 +35,13 @@ class LecturaApriori(lecturaFicheroReglas):
                         valorAtributos[j] = linea[index + 3]
                         operadores[j] = linea[index + 1]
 
-
-                index = linea.index('Class')
+                try:
+                    index = linea.index('Class')
+                except:
+                    try:
+                        index = linea.index('class')
+                    except:
+                        "Error"
                 clase = linea[index + 2]
 
                 regla = Regla(valorAtributos, clase, nombreRegla, operadores)

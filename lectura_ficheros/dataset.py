@@ -38,7 +38,8 @@ class lecturaDataset:
             #Obtener atributos del dataset
             elif("@inputs" in lineas[i]):
                 linea = linea.replace('@inputs ', '')
-                self.atributos = linea.split(', ')
+                linea = linea.replace(', ', ',')
+                self.atributos = linea.split(',')
 
                 print(self.atributos)
 
