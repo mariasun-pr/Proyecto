@@ -47,12 +47,38 @@ class lecturaDataset:
                 almacenarDatos = True
 
             elif(almacenarDatos):
+                linea = linea.replace(', ', ',')
+                linea = linea.split(',')
                 self.datos.append(linea)
 
                 #print(self.datos)
-
+        self.tratarDataset()
         #Si la carga se ha producido correctamente
         return True
+    
+
+    def tratarDataset(self):
+        self.valoresAtributoPorClase = []
+
+        for clase in self.clases:
+            valorAtributos = [None] * len(self.atributos)
+            for dato in self.datos:
+                if(clase in dato):
+                    for i in range (len(self.atributos)):
+                        if(valorAtributos[i] == None):
+                            valorAtributos[i] = dato[i]
+                        elif (dato[i] not in valorAtributos[i]):
+                            valorAtributos[i] = valorAtributos[i] + ' ' + dato[i]
+            
+            self.valoresAtributoPorClase.append(valorAtributos)
+
+            print(valorAtributos)
+
+
+
+
+
+
 
     
 
