@@ -1,5 +1,6 @@
-
+import re
 from utils.constantes import *
+
 
 class lecturaDataset:
     def __init__(self, nombreFichero, algoritmo):
@@ -16,26 +17,27 @@ class lecturaDataset:
         compruebaDiscreto = False
         almacenarDatos = False
 
-        for i in range (len(lineas)):
+        for i in range(len(lineas)):
             linea = lineas[i]
             linea = linea.rstrip()
 
-            #Obtener clases del dataset
-            if("@attribute" in lineas[i] and "@inputs" in lineas[i+1]):   
-                linea = linea.replace('class', '').replace('@attribute', '').replace('}', '').replace('{', '').replace(' ','').replace('Class', '')
-                clases = linea.split(',')
-                self.clases = clases
+            # Obtener clases del dataset
+            if("@attribute" in lineas[i] and "@inputs" in lineas[i+1]):
+                linea = re.sub(r'}.*', "", linea)
+                linea = re.sub(r'^.*?(?=\{)', "", linea)
+                linea = linea.replace('{', '').replace(', ', ',')
+                self.clases = linea.split(',')
                 print(self.clases)
 
-            #Comprobar tipo de atributo del dataset
+            # Comprobar tipo de atributo del dataset
             elif("@attribute" in lineas[i] and not compruebaDiscreto):
                 if("real" in lineas[i] and self.algoritmo in ALGORITMOS_NO_CONTINUOS):
                     print("Tiene que ser el dataset discretizado")
                     return False
                 else:
                     compruebaDiscreto = True
-            
-            #Obtener atributos del dataset
+
+            # Obtener atributos del dataset
             elif("@inputs" in lineas[i]):
                 linea = linea.replace('@inputs ', '')
                 linea = linea.replace(', ', ',')
@@ -43,19 +45,22 @@ class lecturaDataset:
 
                 print(self.atributos)
 
+            # Para indicar que a partir de aquí solo se almacenan datos
             elif("@data" in lineas[i]):
                 almacenarDatos = True
 
-            elif(almacenarDatos):
+            # Almacenamiento de los datos
+            elif(almacenarDatos and linea != ''):
                 linea = linea.replace(', ', ',')
                 linea = linea.split(',')
                 self.datos.append(linea)
 
-                #print(self.datos)
-        self.tratarDataset()
-        #Si la carga se ha producido correctamente
+        self.reglasCubren = [None] * len(self.datos)
+        #!Probablemente borrar línea de abajo y función
+        #self.tratarDataset()
+
+        # Si la carga se ha producido correctamente
         return True
-    
 
     def tratarDataset(self):
         self.valoresAtributoPorClase = []
@@ -64,26 +69,22 @@ class lecturaDataset:
             valorAtributos = [None] * len(self.atributos)
             for dato in self.datos:
                 if(clase in dato):
-                    for i in range (len(self.atributos)):
+                    for i in range(len(self.atributos)):
                         if(valorAtributos[i] == None):
                             valorAtributos[i] = dato[i]
                         elif (dato[i] not in valorAtributos[i]):
-                            valorAtributos[i] = valorAtributos[i] + ' ' + dato[i]
-            
+                            valorAtributos[i] = valorAtributos[i] + \
+                                ' ' + dato[i]
+
             self.valoresAtributoPorClase.append(valorAtributos)
 
             print(valorAtributos)
 
 
-
-
-
-
-
-    
-
-        
-
-
-
-
+    def anadirRegla(self, dato, regla):
+        nombreRegla = re.sub(r':.*', "", regla.nombre)
+        valor = self.reglasCubren[self.datos.index(dato)]
+        if(valor != None and nombreRegla not in valor):
+            self.reglasCubren[self.datos.index(dato)] += " " + nombreRegla
+        elif(valor == None):
+            self.reglasCubren[self.datos.index(dato)] = nombreRegla

@@ -11,7 +11,11 @@ class Regla:
         self.fn = 0
 
     def mostrar(self):
-        print("\n\n\n"+self.nombre + "\n")
-        print(self.clase + "\n")
+        print("\n\n\n"+self.nombre)
+        #print(self.clase + "\n")
         print(self.atributos)
         print(self.operadores)
+        print("tp:" + str(self.tp))
+        print("tn:" + str(self.tn))
+        print("fp:" + str(self.fp))
+        print("fn:" + str(self.fn))

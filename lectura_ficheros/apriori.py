@@ -8,8 +8,6 @@ class LecturaApriori(lecturaFicheroReglas):
         self.fichero = open(fichero)
         lineas = self.fichero.readlines()
 
-        #self.dataset = dataset
-
         self.reglas = []
 
         for i in range (len(lineas)):
@@ -17,8 +15,8 @@ class LecturaApriori(lecturaFicheroReglas):
             linea = linea.rstrip()
 
             if(linea.__contains__("IF")):
-                nombreRegla = re.sub(r'--.*', "", linea)
-
+                nombreRegla = re.sub(r'--.*', "", linea) 
+                
                 linea = linea.split(' ')
 
                 numAtributos = len(dataset.atributos)
@@ -46,7 +44,4 @@ class LecturaApriori(lecturaFicheroReglas):
 
                 regla = Regla(valorAtributos, clase, nombreRegla, operadores)
                 self.reglas.append(regla)
-
-        for regla in self.reglas:
-           regla.mostrar()  
 
