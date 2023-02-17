@@ -2,7 +2,7 @@ class evaluacionReglas:
 
     def evaluarReglas(self, dataset, reglas):
 
-        for regla in reglas.reglas:
+        for regla in reglas:
             truePositive = 0
             trueNegative = 0
             falsePositive = 0
@@ -52,7 +52,7 @@ class evaluacionReglas:
             regla.fp = falsePositive
             regla.fn = falseNegative
 
-        for regla in reglas.reglas:
+        for regla in reglas:
             regla.mostrar()
 
         for dato in dataset.datos:

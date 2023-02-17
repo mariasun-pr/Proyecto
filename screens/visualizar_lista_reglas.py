@@ -105,8 +105,8 @@ class VisualizarReglas(tk.Frame):
         for regla in self.controller.reglas:
             tk.Button(
                 frame_canvas,
-                text=regla,
-                command= lambda r = regla: self.move_to_regla(r),
+                text=regla.nombre,
+                command= lambda r = regla.nombre: self.move_to_regla(r),
                 **style.STYLE_BUTTON,
                 font=("Arial",14),
                 justify=tk.LEFT,

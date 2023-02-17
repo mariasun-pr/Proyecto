@@ -3,7 +3,7 @@ from lectura_ficheros.dataset import *
 from utils.regla import *
 import re
 
-class LecturaApriori(lecturaFicheroReglas):
+class Apriori(lecturaFicheroReglas):
     def lecturaFichero(self, fichero, dataset):
         self.fichero = open(fichero)
         lineas = self.fichero.readlines()
@@ -44,4 +44,6 @@ class LecturaApriori(lecturaFicheroReglas):
 
                 regla = Regla(valorAtributos, clase, nombreRegla, operadores)
                 self.reglas.append(regla)
+
+        return self.reglas
 
