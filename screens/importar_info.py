@@ -174,9 +174,14 @@ class Importar(tk.Frame):
             return
         
         dataset = lecturaDataset(self.filenameDatos.get(), algoritmo)
-        if(not dataset.lecturaFichero()):
+        if(dataset.lecturaFichero() == "No discretizado"):
             MessageBox.showerror(
                 "Error", "El algoritmo necesita el conjunto de datos discretizado")
+            self.botonSiguiente.config(state=tk.DISABLED)
+            return
+        elif(dataset.lecturaFichero() == "Formato incorrecto"):
+            MessageBox.showerror(
+                "Error", "El formato del contenido del archivo es incorrecto")
             self.botonSiguiente.config(state=tk.DISABLED)
             return
         

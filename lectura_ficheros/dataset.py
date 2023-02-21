@@ -17,6 +17,9 @@ class lecturaDataset:
         compruebaDiscreto = False
         almacenarDatos = False
 
+        if(not "@data\n" in lineas):
+            return "Formato incorrecto"
+
         for i in range(len(lineas)):
             linea = lineas[i]
             linea = linea.rstrip()
@@ -33,7 +36,7 @@ class lecturaDataset:
             elif("@attribute" in lineas[i] and not compruebaDiscreto):
                 if("real" in lineas[i] and self.algoritmo in ALGORITMOS_NO_CONTINUOS):
                     print("Tiene que ser el dataset discretizado")
-                    return False
+                    return "No discretizado"
                 else:
                     compruebaDiscreto = True
 
@@ -60,7 +63,7 @@ class lecturaDataset:
         #self.tratarDataset()
 
         # Si la carga se ha producido correctamente
-        return True
+        return "True"
 
     def tratarDataset(self):
         self.valoresAtributoPorClase = []
