@@ -39,7 +39,7 @@ class Importar(tk.Frame):
         nombreFichero = tk.filedialog.askopenfilename()
         self.filenameDatos.set(nombreFichero)
         print('Selected:', self.filenameDatos.get)
-        # self.leerFichero(nombreFichero)
+
         if self.filenameReglas.get() != "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ" and self.filenameReglas.get() != "":
             self.botonSiguiente.config(state=tk.NORMAL)
             self.leerFicheros()

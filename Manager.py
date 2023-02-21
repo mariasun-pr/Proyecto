@@ -10,7 +10,7 @@ from screens.regla_screen import *
 class Manager(tk.Tk):
     
     reglas = []
-    nombre_regla_a_mostrar = tk.StringVar
+    reglasSeleccionada = None
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -33,8 +33,6 @@ class Manager(tk.Tk):
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky=tk.NSEW) 
         self.show_frame(Home, False)
-
-        self.nombre_regla_a_mostrar = tk.StringVar(self)
 
     def show_frame(self, container, hecho):
         frame = self.frames[container]

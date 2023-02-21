@@ -19,7 +19,7 @@ class VisualizarReglas(tk.Frame):
         self.reglas = reglas
 
     def move_to_regla(self, regla):
-        self.controller.nombre_regla_a_mostrar.set(regla)
+        self.controller.reglaSeleccionada = regla
         self.controller.show_frame(VisualizarInfoRegla, False)
         if(not self.hecho):
             self.hecho=True
@@ -56,6 +56,7 @@ class VisualizarReglas(tk.Frame):
             padx=20,
             pady=11, 
         )
+        #TODO: Cambiar a grid.
         tk.Label(
             inicioFrame, 
             text="Selecciona una regla para ver más información",
@@ -99,14 +100,11 @@ class VisualizarReglas(tk.Frame):
         self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=1, anchor=tk.N)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 
-
-
-        print(self.controller.reglas)
         for regla in self.controller.reglas:
             tk.Button(
                 frame_canvas,
                 text=regla.nombre,
-                command= lambda r = regla.nombre: self.move_to_regla(r),
+                command= lambda r = regla: self.move_to_regla(r),
                 **style.STYLE_BUTTON,
                 font=("Arial",14),
                 justify=tk.LEFT,

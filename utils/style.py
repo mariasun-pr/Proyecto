@@ -5,6 +5,8 @@ FONT_BUTTON=("Arial",20)
 FONT_TEXT = ("Arial",15)
 COLOR_COMPONENT= "#8c8c8c"
 COLOR_TEXT = "#000000"
+FONT_TITLE_TABLE = ("Arial",15, "bold")
+COLOR_BACKGROUND_TITLE = "#6EC2F7"
 
 STYLE = {
     "font": FONT_TITLE,
@@ -21,10 +23,17 @@ STYLE_BUTTON = {
 STYLE_TEXT = {
     "font": FONT_TEXT,
     "fg": COLOR_TEXT,
+    "disabledforeground": COLOR_TEXT,
 }
 
 STYLE_TITULO_REGLAS = {
     "font": FONT_BUTTON,
     "bg": COLOR_BACKGROUND,
     "fg": COLOR_TEXT,
+}
+
+STYLE_TITULO_TABLA = {
+    "font": FONT_TITLE_TABLE,
+    "disabledbackground": COLOR_BACKGROUND_TITLE,
+    "disabledforeground": COLOR_TEXT,
 }
