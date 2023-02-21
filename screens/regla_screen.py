@@ -16,21 +16,19 @@ class VisualizarInfoRegla(tk.Frame):
         self.controller.get_frame("VisualizarReglas")
 
     def init_widgets(self):
-        self.grid_columnconfigure(0, weight=1)
-        self.grid_columnconfigure(1, weight=1)
+        #self.grid_columnconfigure(0, weight=1)
+        #self.grid_columnconfigure(1, weight=1)
 
         inicioFrame = tk.Frame(self)
         inicioFrame.configure(background=style.COLOR_BACKGROUND,)
-        inicioFrame.grid(
-            row=0,
-            column=0,
-            columnspan=2,
+        inicioFrame.pack(
+            side = tk.TOP,
+            fill=tk.X,
             padx=20,
             pady=11,
-            sticky=tk.NSEW,
         )
-        inicioFrame.grid_columnconfigure(0, weight=1)
-        inicioFrame.grid_columnconfigure(1, weight=1)
+        #inicioFrame.grid_columnconfigure(0, weight=1)
+        #inicioFrame.grid_columnconfigure(1, weight=1)
 
         tk.Button(
             inicioFrame,
@@ -38,12 +36,10 @@ class VisualizarInfoRegla(tk.Frame):
             command=lambda: self.controller.get_frame("VisualizarReglas"),
             **style.STYLE_BUTTON,
             font=("Arial", 13)
-        ).grid(
-            row=0,
-            column=0,
+        ).pack(
+            side = tk.LEFT,
             padx=20,
-            pady=11,
-            sticky=tk.NW,
+            pady=11, 
         )
         nombreRegla = tk.Label(
             inicioFrame,
@@ -52,23 +48,21 @@ class VisualizarInfoRegla(tk.Frame):
             wraplength=2000,
             **style.STYLE_TITULO_REGLAS  # Desenpaqueta STYLE,
         )
-        nombreRegla.grid(
-            row=0,
-            column=1,
+        nombreRegla.pack(
+            fill=tk.X,
             padx=20,
-            pady=11,
-            sticky=tk.W,
+            pady=11,  
+            side=tk.LEFT, 
         )
 
         infoReglaFrame = tk.Frame(self)
         infoReglaFrame.configure(background=style.COLOR_BACKGROUND,)
-        infoReglaFrame.grid(
-            row=1,
-            column=0,
-            columnspan=2,
+        infoReglaFrame.pack(
+            side = tk.TOP,
+            fill=tk.X,
             padx=20,
             pady=11,
-            sticky=tk.NSEW,
+   
         )
         infoReglaFrame.grid_columnconfigure(0, weight=1)
         infoReglaFrame.grid_columnconfigure(1, weight=1)
@@ -81,6 +75,7 @@ class VisualizarInfoRegla(tk.Frame):
         tp = tk.Entry(
             infoReglaFrame,
             justify=tk.CENTER,
+            width=40,
         )
         tp.grid(
             row=0,
@@ -129,6 +124,7 @@ class VisualizarInfoRegla(tk.Frame):
         fp = tk.Entry(
             infoReglaFrame,
             justify=tk.CENTER,
+            width=40,
         )
         fp.grid(
             row=0,
