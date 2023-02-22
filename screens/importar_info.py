@@ -28,13 +28,14 @@ class Importar(tk.Frame):
 
         self.definirAlgoritmos()
 
-        # self.init_widgets()
 
+    #Método que pasa a la siguiente pantalla (Visualizar lista reglas).
     def move_to_visualizarReglas(self):
         self.controller.show_frame(VisualizarReglas, False)
         if(not self.hecho):
             self.hecho = True
 
+    #Método para importar el dataset
     def importarDatos(self):
         nombreFichero = tk.filedialog.askopenfilename()
         self.filenameDatos.set(nombreFichero)
@@ -44,6 +45,7 @@ class Importar(tk.Frame):
             self.botonSiguiente.config(state=tk.NORMAL)
             self.leerFicheros()
 
+    #Método para importat el conjunto de reglas
     def importarReglas(self):
         nombreFichero = tk.filedialog.askopenfilename()
         self.filenameReglas.set(nombreFichero)
@@ -53,8 +55,8 @@ class Importar(tk.Frame):
             self.botonSiguiente.config(state=tk.NORMAL)
             self.leerFicheros()
 
-
     def init_widgets(self):
+        #Título
         tk.Label(
             self,
             text="Importa los ficheros",
@@ -164,15 +166,16 @@ class Importar(tk.Frame):
             sticky=tk.N,
         )
 
+
     def leerFicheros(self):
-        algoritmo = self.leerCabeceraRegla(self.filenameReglas.get())
+        algoritmo = self.leerCabeceraRegla(self.filenameReglas.get())       #Se obtiene el algoritmo que ha generado las reglas
 
         if(algoritmo not in ALGORITMOS_VALIDOS):
             MessageBox.showerror(
                 "Error", "El algoritmo no está registrado en la aplicación")
             self.botonSiguiente.config(state=tk.DISABLED)
             return
-        
+
         dataset = lecturaDataset(self.filenameDatos.get(), algoritmo)
         if(dataset.lecturaFichero() == "No discretizado"):
             MessageBox.showerror(
@@ -184,20 +187,22 @@ class Importar(tk.Frame):
                 "Error", "El formato del contenido del archivo es incorrecto")
             self.botonSiguiente.config(state=tk.DISABLED)
             return
-        
-        #TODO: Añadir algoritmos aquí
+
+        # TODO: Añadir algoritmos aquí
         if(algoritmo == "apriori"):
             self.controller.reglas = self.algoritmos[Apriori].lecturaFichero(self.filenameReglas.get(), dataset)
 
         evaluador = evaluacionReglas()
         evaluador.evaluarReglas(dataset, self.controller.reglas)
 
+    #Inicialización de los algoritmos que lee la aplicación
     def definirAlgoritmos(self):
         self.algoritmos = {}
-        for Alg in (Apriori, ):  # Añadir aquí los algoritmos que se vayan añadiendo
+        for Alg in (Apriori, ):  #! Añadir aquí los algoritmos que se vayan añadiendo
             algoritmo = Alg()
             self.algoritmos[Alg] = algoritmo
 
+    #Método que obtiene el algoritmo que ha generado las reglas
     def leerCabeceraRegla(self, nombreFichero):
         fichero = open(nombreFichero)
         linea = fichero.readline()

@@ -58,9 +58,10 @@ class lecturaDataset:
                 linea = linea.split(',')
                 self.datos.append(linea)
 
+        # Inicializo el atributo que almacen las reglas que cubren al dato
         self.reglasCubren = [None] * len(self.datos)
         #!Probablemente borrar línea de abajo y función
-        #self.tratarDataset()
+        # self.tratarDataset()
 
         # Si la carga se ha producido correctamente
         return "True"
@@ -82,7 +83,6 @@ class lecturaDataset:
             self.valoresAtributoPorClase.append(valorAtributos)
 
             print(valorAtributos)
-
 
     def anadirRegla(self, dato, regla):
         nombreRegla = re.sub(r':.*', "", regla.nombre)

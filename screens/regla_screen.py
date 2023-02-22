@@ -16,9 +16,6 @@ class VisualizarInfoRegla(tk.Frame):
         self.controller.get_frame("VisualizarReglas")
 
     def init_widgets(self):
-        #self.grid_columnconfigure(0, weight=1)
-        #self.grid_columnconfigure(1, weight=1)
-
         inicioFrame = tk.Frame(self)
         inicioFrame.configure(background=style.COLOR_BACKGROUND,)
         inicioFrame.pack(
@@ -27,8 +24,6 @@ class VisualizarInfoRegla(tk.Frame):
             padx=20,
             pady=11,
         )
-        #inicioFrame.grid_columnconfigure(0, weight=1)
-        #inicioFrame.grid_columnconfigure(1, weight=1)
 
         tk.Button(
             inicioFrame,
@@ -41,14 +36,14 @@ class VisualizarInfoRegla(tk.Frame):
             padx=20,
             pady=11, 
         )
-        nombreRegla = tk.Label(
+
+        tk.Label(
             inicioFrame,
             text=self.controller.reglaSeleccionada.nombre,
             justify=tk.CENTER,
             wraplength=2000,
             **style.STYLE_TITULO_REGLAS  # Desenpaqueta STYLE,
-        )
-        nombreRegla.pack(
+        ).pack(
             fill=tk.X,
             padx=20,
             pady=11,  
@@ -62,7 +57,6 @@ class VisualizarInfoRegla(tk.Frame):
             fill=tk.X,
             padx=20,
             pady=11,
-   
         )
         infoReglaFrame.grid_columnconfigure(0, weight=1)
         infoReglaFrame.grid_columnconfigure(1, weight=1)

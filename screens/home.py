@@ -16,6 +16,7 @@ class Home(tk.Frame):
         self.controller.show_frame(Importar, False)
 
     def init_widgets(self):
+        #Título
         tk.Label(
             self,
             text="Visualizador de algoritmos SDRD",
@@ -27,6 +28,8 @@ class Home(tk.Frame):
             padx=20,
             pady=11,
         )
+
+        #Imagen
         self.phtotoImage = tk.PhotoImage(file="./assets/escudo3.png")
         tk.Label(
             self,
@@ -40,6 +43,8 @@ class Home(tk.Frame):
             fill=tk.X,
             padx=20,
         )
+
+        #Botón de inicio
         tk.Button(
             self,
             text="Nueva visualización",
