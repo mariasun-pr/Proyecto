@@ -5,6 +5,7 @@ from utils import style
 from screens.visualizar_lista_reglas import *
 from lectura_ficheros.dataset import *
 from lectura_ficheros.apriori import *
+from lectura_ficheros.cn2 import *
 from utils.evaluaciónReglas import *
 from utils.constantes import *
 
@@ -191,6 +192,9 @@ class Importar(tk.Frame):
         # TODO: Añadir algoritmos aquí
         if(algoritmo == "apriori"):
             self.controller.reglas = self.algoritmos[Apriori].lecturaFichero(self.filenameReglas.get(), dataset)
+        
+        if(algoritmo == "cn2"):
+            self.controller.reglas = self.algoritmos[Cn2].lecturaFichero(self.filenameReglas.get(), dataset)
 
         evaluador = evaluacionReglas()
         evaluador.evaluarReglas(dataset, self.controller.reglas)
@@ -198,7 +202,7 @@ class Importar(tk.Frame):
     #Inicialización de los algoritmos que lee la aplicación
     def definirAlgoritmos(self):
         self.algoritmos = {}
-        for Alg in (Apriori, ):  #! Añadir aquí los algoritmos que se vayan añadiendo
+        for Alg in (Apriori, Cn2):  #! Añadir aquí los algoritmos que se vayan añadiendo
             algoritmo = Alg()
             self.algoritmos[Alg] = algoritmo
 

@@ -22,16 +22,16 @@ class evaluacionReglas:
                         elif(regla.operadores[i] == '<>' and regla.atributos[i] != dato[i]):
                             contOcurrencias += 1
 
-                        elif(regla.operadores[i] == '<' and regla.atributos[i] < dato[i]):
-                            contOcurrencias += 1 
+                        elif(regla.operadores[i] == '<' and dato[i] < regla.atributos[i]):
+                            contOcurrencias += 1
 
-                        elif(regla.operadores[i] == '>' and regla.atributos[i] > dato[i]):
-                            contOcurrencias += 1  
+                        elif(regla.operadores[i] == '>' and dato[i] > regla.atributos[i]):
+                            contOcurrencias += 1
 
-                        elif(regla.operadores[i] == '=>' and int(regla.atributos[i]) >= int(dato[i])):
-                            contOcurrencias += 1   
+                        elif(regla.operadores[i] == '=>' and int(dato[i]) >= int(regla.atributos[i])):
+                            contOcurrencias += 1
 
-                        elif(regla.operadores[i] == '<=' and int(regla.atributos[i]) <= int(dato[i])):
+                        elif(regla.operadores[i] == '<=' and int(dato[i]) <= int(regla.atributos[i])):
                             contOcurrencias += 1
 
                 if(dato[len(regla.atributos)] == regla.clase):
@@ -56,6 +56,6 @@ class evaluacionReglas:
             regla.mostrar()
 
         for dato in dataset.datos:
-            print (dato)
+            print(dato)
             print(dataset.reglasCubren[dataset.datos.index(dato)])
             print("\n\n")
