@@ -4,7 +4,7 @@ from utils.regla import *
 import re
 
 
-class Apriori(lecturaFicheroReglas):
+class Sd(lecturaFicheroReglas):
     def lecturaFichero(self, fichero, dataset):
         self.fichero = open(fichero)
         lineas = self.fichero.readlines()
@@ -16,7 +16,7 @@ class Apriori(lecturaFicheroReglas):
             linea = linea.rstrip()
 
             if(linea.__contains__("IF")):
-                nombreRegla = re.sub(r'--.*', "", linea)
+                nombreRegla = linea
 
                 linea = linea.split(' ')
 
@@ -33,7 +33,7 @@ class Apriori(lecturaFicheroReglas):
                     except:
                         index = -1
                     if(index >= 0):
-                        valorAtributos[j] = linea[index + 3]
+                        valorAtributos[j] = linea[index + 2]
                         operadores[j] = linea[index + 1]
 
                 try:
