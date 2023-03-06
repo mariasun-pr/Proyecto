@@ -1,5 +1,5 @@
 
-ALGORITMOS_NO_CONTINUOS = ["apriori","cn2","sd","sd map"]
+ALGORITMOS_NO_CONTINUOS = ["apriori","cn2","sd","sd_map"]
 
 ALGORITMOS_VALIDOS = ALGORITMOS_NO_CONTINUOS
 ALGORITMOS_VALIDOS.append("evolutivo")
