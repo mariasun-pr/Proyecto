@@ -8,6 +8,7 @@ from lectura_ficheros.apriori import *
 from lectura_ficheros.cn2 import *
 from lectura_ficheros.sd import *
 from lectura_ficheros.sd_map import *
+from lectura_ficheros.evolutivos import *
 from utils.evaluaciónReglas import *
 from utils.constantes import *
 
@@ -195,14 +196,17 @@ class Importar(tk.Frame):
         if(algoritmo == "apriori"):
             self.controller.reglas = self.algoritmos[Apriori].lecturaFichero(self.filenameReglas.get(), dataset)
         
-        if(algoritmo == "cn2"):
+        elif(algoritmo == "cn2"):
             self.controller.reglas = self.algoritmos[Cn2].lecturaFichero(self.filenameReglas.get(), dataset)
 
-        if(algoritmo == "sd"):
+        elif(algoritmo == "sd"):
             self.controller.reglas = self.algoritmos[Sd].lecturaFichero(self.filenameReglas.get(), dataset)
 
-        if(algoritmo == "sd_map"):
+        elif(algoritmo == "sd_map"):
             self.controller.reglas = self.algoritmos[SdMap].lecturaFichero(self.filenameReglas.get(), dataset)
+
+        elif(algoritmo in ALGORITMOS_EVOLUTIVOS):
+            self.controller.reglas = self.algoritmos[Evolutivos].lecturaFichero(self.filenameReglas.get(), dataset)        
 
         evaluador = evaluacionReglas()
         evaluador.evaluarReglas(dataset, self.controller.reglas)
@@ -210,7 +214,7 @@ class Importar(tk.Frame):
     #Inicialización de los algoritmos que lee la aplicación
     def definirAlgoritmos(self):
         self.algoritmos = {}
-        for Alg in (Apriori, Cn2, Sd, SdMap):  #! Añadir aquí los algoritmos que se vayan añadiendo
+        for Alg in (Apriori, Cn2, Sd, SdMap, Evolutivos):  #! Añadir aquí los algoritmos que se vayan añadiendo
             algoritmo = Alg()
             self.algoritmos[Alg] = algoritmo
 

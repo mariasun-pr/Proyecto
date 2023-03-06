@@ -11,6 +11,7 @@ class SdMap(lecturaFicheroReglas):
 
         self.reglas = []
         clase = ''
+        numAtributos = len(dataset.atributos)
 
         for i in range(len(lineas)):
             linea = lineas[i]
@@ -31,7 +32,6 @@ class SdMap(lecturaFicheroReglas):
 
                 linea = linea.split(' ')
 
-                numAtributos = len(dataset.atributos)
                 valorAtributos = [None] * numAtributos
                 operadores = [None] * numAtributos
 

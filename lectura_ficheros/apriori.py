@@ -10,6 +10,7 @@ class Apriori(lecturaFicheroReglas):
         lineas = self.fichero.readlines()
 
         self.reglas = []
+        numAtributos = len(dataset.atributos)
 
         for i in range(len(lineas)):
             linea = lineas[i]
@@ -20,14 +21,13 @@ class Apriori(lecturaFicheroReglas):
 
                 linea = linea.split(' ')
 
-                numAtributos = len(dataset.atributos)
                 valorAtributos = [None] * numAtributos
                 operadores = [None] * numAtributos
 
                 for j in range(numAtributos):
                     index = -1
 
-                    # Comprueba si la regla tiene da valor al atributo j, si sí almacena el valor y el operador utilizado
+                    # Comprueba si la regla da valor al atributo j, si sí almacena el valor y el operador utilizado
                     try:
                         index = linea.index(dataset.atributos[j])
                     except:

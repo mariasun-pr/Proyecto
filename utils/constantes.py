@@ -1,5 +1,6 @@
 
-ALGORITMOS_NO_CONTINUOS = ["apriori","cn2","sd","sd_map"]
+ALGORITMOS_NO_CONTINUOS = ["apriori","cn2","sd","sd_map", ]
 
 ALGORITMOS_VALIDOS = ALGORITMOS_NO_CONTINUOS
-ALGORITMOS_VALIDOS.append("evolutivo")
+ALGORITMOS_EVOLUTIVOS = ["mesdif", "nmeef", "sdiga"]
+ALGORITMOS_VALIDOS += ALGORITMOS_EVOLUTIVOS

@@ -9,6 +9,7 @@ class Cn2(lecturaFicheroReglas):
         lineas = self.fichero.readlines()
 
         self.reglas = []
+        numAtributos = len(dataset.atributos)
 
         for i in range(len(lineas)):
             linea = lineas[i]
@@ -19,7 +20,6 @@ class Cn2(lecturaFicheroReglas):
 
                 linea = linea.split(' ')
 
-                numAtributos = len(dataset.atributos)
                 valorAtributos = [None] * numAtributos
                 operadores = [None] * numAtributos
 
