@@ -13,36 +13,36 @@ class evaluacionReglas:
                 contValoresAtributosRegla = 0
 
                 for i in range(len(regla.atributos)):
-                    if(regla.atributos[i] != None):
+                    if (regla.atributos[i] != None):
                         contValoresAtributosRegla += 1
 
-                        if(regla.operadores[i] == '=' and regla.atributos[i] == dato[i]):
+                        if (regla.operadores[i] == '=' and regla.atributos[i] == dato[i]):
                             contOcurrencias += 1
 
-                        elif(regla.operadores[i] == '<>' and regla.atributos[i] != dato[i]):
+                        elif (regla.operadores[i] == '<>' and regla.atributos[i] != dato[i]):
                             contOcurrencias += 1
 
-                        elif(regla.operadores[i] == '<' and dato[i] < regla.atributos[i]):
+                        elif (regla.operadores[i] == '<' and dato[i] < regla.atributos[i]):
                             contOcurrencias += 1
 
-                        elif(regla.operadores[i] == '>' and dato[i] > regla.atributos[i]):
+                        elif (regla.operadores[i] == '>' and dato[i] > regla.atributos[i]):
                             contOcurrencias += 1
 
-                        elif(regla.operadores[i] == '=>' and int(dato[i]) >= int(regla.atributos[i])):
+                        elif (regla.operadores[i] == '=>' and int(dato[i]) >= int(regla.atributos[i])):
                             contOcurrencias += 1
 
-                        elif(regla.operadores[i] == '<=' and int(dato[i]) <= int(regla.atributos[i])):
+                        elif (regla.operadores[i] == '<=' and int(dato[i]) <= int(regla.atributos[i])):
                             contOcurrencias += 1
 
-                if(dato[len(regla.atributos)] == regla.clase):
-                    if(contOcurrencias == contValoresAtributosRegla):
+                if (dato[len(regla.atributos)] == regla.clase):
+                    if (contOcurrencias == contValoresAtributosRegla):
                         truePositive += 1
                         dataset.anadirRegla(dato, regla)
                     else:
                         falseNegative += 1
 
-                if(dato[len(regla.atributos)] != regla.clase):
-                    if(contOcurrencias == contValoresAtributosRegla):
+                if (dato[len(regla.atributos)] != regla.clase):
+                    if (contOcurrencias == contValoresAtributosRegla):
                         falsePositive += 1
                     else:
                         trueNegative += 1
@@ -51,6 +51,11 @@ class evaluacionReglas:
             regla.tn = trueNegative
             regla.fp = falsePositive
             regla.fn = falseNegative
+
+            regla.tpr = round(
+                (truePositive / (truePositive + falseNegative))*100, 2)
+            regla.fpr = round(
+                (falsePositive / (falsePositive + trueNegative))*100, 2)
 
         for regla in reglas:
             regla.mostrar()
