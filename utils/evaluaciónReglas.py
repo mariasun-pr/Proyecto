@@ -38,6 +38,7 @@ class evaluacionReglas:
                     if (contOcurrencias == contValoresAtributosRegla):
                         truePositive += 1
                         dataset.anadirRegla(dato, regla)
+                        regla.datosCubre.append(dato)
                     else:
                         falseNegative += 1
 

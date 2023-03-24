@@ -8,6 +8,7 @@ class Regla:
         self.clase = clase
         self.nombre = nombreRegla
         self.operadores = operadores
+        self.datosCubre = []
 
         self.tp = 0
         self.tn = 0
@@ -28,6 +29,8 @@ class Regla:
         print("fn:" + str(self.fn))
         print("tpr:" + str(self.tpr))
         print("fpr:" + str(self.fpr))
+
+        print(self.datosCubre[0])
 
         """
         #!GRÁFICO DE PUNTOS
