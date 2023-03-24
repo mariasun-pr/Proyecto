@@ -1,7 +1,3 @@
-# importar todas las funciones de pylab
-# from pylab import *
-
-# importar el módulo pyplot
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -49,7 +45,7 @@ class Regla:
          """
 
         #!PIRÁMIDE DE POBLACIÓN
-
+""""
         fig, ax = plt.subplots()
         XY = np.arange(0, 101, 1)
         ax.barh(0, self.tpr, align='center')
@@ -67,7 +63,7 @@ class Regla:
         plt.yticks([])
 
         plt.show()
-
+"""
 
 """"
         age_groups = ['0-9', '10-19', '20-29', '30-39', '40-49', '50-59', '60+']

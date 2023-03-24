@@ -92,7 +92,7 @@ class VisualizarReglas(tk.Frame):
                               highlightthickness=0)
         
         self.canvas.bind('<Configure>', lambda e: self.canvas.configure(
-            scrollregion=self.canvas.bbox(tk.ALL)))
+            scrollregion= self.canvas.bbox(tk.ALL)))
 
         frame_canvas = tk.Frame(self.canvas)
         frame_canvas.configure(background=style.COLOR_BACKGROUND)
