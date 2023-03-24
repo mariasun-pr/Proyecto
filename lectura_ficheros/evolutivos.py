@@ -17,7 +17,7 @@ class Evolutivos(lecturaFicheroReglas):
             linea = lineas[i]
             linea = linea.rstrip()
             if(linea.__contains__('Antecedent')):
-                nombreRegla = "Regla " + str(numRegla) + " IF "
+                nombreRegla = "Regla " + str(numRegla) + ": IF "
                 numRegla += 1
 
                 valorAtributos = [None] * numAtributos

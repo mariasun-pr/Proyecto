@@ -88,6 +88,6 @@ class lecturaDataset:
         nombreRegla = re.sub(r':.*', "", regla.nombre)
         valor = self.reglasCubren[self.datos.index(dato)]
         if(valor != None and nombreRegla not in valor):
-            self.reglasCubren[self.datos.index(dato)] += " " + nombreRegla
+            self.reglasCubren[self.datos.index(dato)] += ", " + nombreRegla
         elif(valor == None):
             self.reglasCubren[self.datos.index(dato)] = nombreRegla

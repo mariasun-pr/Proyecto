@@ -11,6 +11,7 @@ class Manager(tk.Tk):
     
     reglas = []
     reglasSeleccionada = None
+    dataset = None
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

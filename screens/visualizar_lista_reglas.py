@@ -3,6 +3,10 @@ import sys
 from tkinter import filedialog
 from utils import style
 from screens.regla_screen import *
+import sys
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import matplotlib.pyplot as plt
+import numpy as np
 
 
 class VisualizarReglas(tk.Frame):
@@ -10,18 +14,14 @@ class VisualizarReglas(tk.Frame):
         super().__init__(parent)
         self.configure(background=style.COLOR_BACKGROUND)
         self.controller = controller
-        self.reglas = controller.reglas
         self.canvas = tk.Canvas
 
         self.hecho = False
 
-    def setReglas(self, reglas):
-        self.reglas = reglas
-
     def move_to_regla(self, regla):
         self.controller.reglaSeleccionada = regla
         self.controller.show_frame(VisualizarInfoRegla, False)
-        if(not self.hecho):
+        if (not self.hecho):
             self.hecho = True
 
     def movement_mouse_wheel(self, event):
@@ -87,17 +87,18 @@ class VisualizarReglas(tk.Frame):
             reglasFrame, orient=tk.VERTICAL, command=self.canvas.yview)
 
         self.canvas.configure(yscrollcommand=scrollbar.set,
-                              background=style.COLOR_BACKGROUND, 
-                              borderwidth=0, 
+                              background=style.COLOR_BACKGROUND,
+                              borderwidth=0,
                               highlightthickness=0)
-        
+
         self.canvas.bind('<Configure>', lambda e: self.canvas.configure(
-            scrollregion= self.canvas.bbox(tk.ALL)))
+            scrollregion=self.canvas.bbox(tk.ALL)))
 
         frame_canvas = tk.Frame(self.canvas)
         frame_canvas.configure(background=style.COLOR_BACKGROUND)
         frame_canvas.grid_columnconfigure(0, weight=1)
-        self.canvas.create_window((0, 0), window=frame_canvas, anchor=tk.N)
+        frame_canvas.grid_columnconfigure(1, weight=1)
+        self.canvas.create_window((1, 1), window=frame_canvas, anchor=tk.N)
 
         # Para que funcione el scroll con la rueda del ratón en cualquier SO
         self.canvas.bind("<MouseWheel>", self.movement_mouse_wheel)
@@ -118,6 +119,12 @@ class VisualizarReglas(tk.Frame):
             pady=20,
         )
 
+        self.AccesoReglaIndividual(frame_canvas)
+        self.DibujarGraficoPuntos(frame_canvas)
+        self.DibujarPiramidePoblacion(frame_canvas)
+        self.TablaDatosCubreRegla(frame_canvas)
+
+    def AccesoReglaIndividual(self, frame_canvas):
         cont = 0
         for regla in self.controller.reglas:
             tk.Button(
@@ -132,5 +139,114 @@ class VisualizarReglas(tk.Frame):
                 row=cont,
                 padx=10,
                 sticky=tk.NSEW,
+                columnspan=2
             )
             cont += 1
+
+    def DibujarGraficoPuntos(self, infoReglaFrame):
+        fig, ax = plt.subplots()
+        ax.set_xlim(-1, 101)
+        ax.set_ylim(-1, 101)
+        ax.set_xlabel('FPr')
+        ax.set_ylabel('TPr')
+        ax.set_title('TPr/FPr')
+
+        XY = np.arange(0, 101, 1)
+        ax.fill_between(XY, XY, facecolor='red', alpha=0.65)
+        for regla in self.controller.reglas:
+            ax.scatter(regla.fpr, regla.tpr, s=110)
+            nombreSeparado = regla.nombre.split(' ')
+            plt.annotate("      "+nombreSeparado[0]+" "+nombreSeparado[1], (regla.fpr, regla.tpr))
+
+        # Create canvas
+        canvas = FigureCanvasTkAgg(fig, master=infoReglaFrame)
+        canvas.draw()
+
+        # Add canvas to Tkinter window
+        canvas.get_tk_widget().grid(
+            row=len(self.controller.reglas),
+            column=0,
+            columnspan=2,
+            sticky=tk.NSEW,
+            pady=13,
+        )
+
+    def DibujarPiramidePoblacion(self, infoReglaFrame):
+        fig, ax = plt.subplots()
+        cont = 0
+        for regla in self.controller.reglas:
+            ax.barh(cont, regla.tpr, align='center', color='#00B6FF')
+            ax.barh(cont, -regla.fpr, align='center', color='#CB3234')
+            nombreSeparado = regla.nombre.split(' ')
+            ax.annotate(nombreSeparado[0]+" "+nombreSeparado[1], (-10, cont), size=11)
+            #ax.annotate("FPr: " + str(regla.fpr)+ "         " + "TPr: " + str(regla.tpr), (-35, cont-0.2), size=11)
+            cont+=1
+
+        ax.set_xticks(np.arange(-100, 101, 20))
+        ax.set_xticklabels(['100', '80', '60', '40', '20',
+                           '0', '20', '40', '60', '80', '100'])
+
+        ax.set_xlabel('FPr y TPr')
+        ax.set_title('Pirámide FPr/TPr')
+        plt.yticks([])
+
+        # Create canvas
+        canvas = FigureCanvasTkAgg(fig, master=infoReglaFrame)
+        canvas.draw()
+
+        # Add canvas to Tkinter window
+        canvas.get_tk_widget().grid(
+            row=len(self.controller.reglas)+1,
+            column=0,
+            columnspan=2,
+            sticky=tk.NSEW,
+            pady=13,
+        )
+
+    def TablaDatosCubreRegla(self, infoReglaFrame):
+        tituloTabla = tk.Entry(
+            infoReglaFrame,
+            justify=tk.CENTER,
+        )
+        tituloTabla.grid(
+            row=len(self.controller.reglas)+2,
+            column=0,
+            sticky=tk.NSEW,
+            columnspan=2
+        )
+        tituloTabla.insert(tk.END, "Reglas que cubren a cada dato")
+        tituloTabla.configure(state=tk.DISABLED, **
+                     style.STYLE_TITULO_TABLA, relief=tk.GROOVE,)
+        
+        cont = len(self.controller.reglas)+3
+        for dato in self.controller.dataset.datos:
+            entradaTabla = tk.Entry(
+                infoReglaFrame,
+                justify=tk.CENTER,
+            )
+            entradaTabla.grid(
+                row=cont,
+                column=0,
+                sticky=tk.NSEW,
+            )
+            entradaTabla.insert(tk.END, dato)
+            entradaTabla.configure(state=tk.DISABLED, **
+                          style.STYLE_TEXT, relief=tk.GROOVE,)
+            
+            entradaReglas = tk.Entry(
+                infoReglaFrame,
+                justify=tk.CENTER,
+            )
+            entradaReglas.grid(
+                row=cont,
+                column=1,
+                sticky=tk.NSEW,
+            )
+            texto = self.controller.dataset.reglasCubren[self.controller.dataset.datos.index(dato)]
+            if(texto == None):
+                texto = ''
+            entradaReglas.insert(tk.END, texto)
+            entradaReglas.configure(state=tk.DISABLED, **
+                          style.STYLE_TEXT, relief=tk.GROOVE,)
+            
+            cont+=1

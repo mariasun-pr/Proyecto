@@ -192,6 +192,7 @@ class Importar(tk.Frame):
             self.botonSiguiente.config(state=tk.DISABLED)
             return
 
+        self.controller.dataset = dataset
         # TODO: Añadir algoritmos aquí
         if(algoritmo == "apriori"):
             self.controller.reglas = self.algoritmos[Apriori].lecturaFichero(self.filenameReglas.get(), dataset)
