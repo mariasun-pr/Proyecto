@@ -80,9 +80,6 @@ class VisualizarInfoRegla(tk.Frame):
         scrollbar = tk.Scrollbar(
             infoReglaFrame, orient=tk.VERTICAL, command=self.canvas.yview)
 
-
-        
-
         frame_canvas = tk.Frame(self.canvas)
         frame_canvas.configure(background=style.COLOR_BACKGROUND)
         frame_canvas.grid_columnconfigure(0, weight=1)
@@ -118,6 +115,8 @@ class VisualizarInfoRegla(tk.Frame):
         self.dibujarTablaContingencias(frame_canvas)
         self.dibujarGraficoPuntos(frame_canvas)
         self.dibujarPiramidePoblacion(frame_canvas)
+        self.TablaDatosCubreRegla(frame_canvas)
+
 
     def dibujarTablaContingencias(self, infoReglaFrame):
         tk.Label(            
@@ -130,7 +129,7 @@ class VisualizarInfoRegla(tk.Frame):
             column=0,
             sticky=tk.NSEW,
             padx=20,
-            pady=8,
+            pady=5,
             columnspan=2
         )
 
@@ -293,3 +292,38 @@ class VisualizarInfoRegla(tk.Frame):
             sticky=tk.NSEW,
             pady=13,
         )
+
+    def TablaDatosCubreRegla(self, infoReglaFrame):
+        tituloTabla = tk.Entry(
+            infoReglaFrame,
+            justify=tk.CENTER,
+        )
+        tituloTabla.grid(
+            row=7,
+            column=0,
+            sticky=tk.NSEW,
+            columnspan=2
+        )
+        tituloTabla.insert(tk.END, "Datos que cubre la regla")
+        tituloTabla.configure(state=tk.DISABLED, **
+                     style.STYLE_TITULO_TABLA, relief=tk.GROOVE,)
+        
+        cont = 8
+        for dato in self.regla.datosCubre:
+            entradaTabla = tk.Entry(
+                infoReglaFrame,
+                justify=tk.CENTER,
+            )
+            entradaTabla.grid(
+                row=cont,
+                column=0,
+                sticky=tk.NSEW,
+                columnspan=2
+            )
+            entradaTabla.insert(tk.END, dato)
+            entradaTabla.configure(state=tk.DISABLED, **
+                          style.STYLE_TEXT, relief=tk.GROOVE,)
+            
+            cont+=1
+
+
