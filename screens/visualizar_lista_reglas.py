@@ -91,8 +91,7 @@ class VisualizarReglas(tk.Frame):
                               borderwidth=0,
                               highlightthickness=0)
 
-        self.canvas.bind('<Configure>', lambda e: self.canvas.configure(
-            scrollregion=self.canvas.bbox(tk.ALL)))
+
 
         frame_canvas = tk.Frame(self.canvas)
         frame_canvas.configure(background=style.COLOR_BACKGROUND)
@@ -124,6 +123,9 @@ class VisualizarReglas(tk.Frame):
         self.DibujarPiramidePoblacion(frame_canvas)
         self.TablaDatosCubreRegla(frame_canvas)
 
+        self.canvas.bind('<Configure>', lambda e: self.canvas.configure(
+            scrollregion=self.canvas.bbox(tk.ALL)))
+
     def AccesoReglaIndividual(self, frame_canvas):
         cont = 0
         for regla in self.controller.reglas:
@@ -150,6 +152,7 @@ class VisualizarReglas(tk.Frame):
         ax.set_xlabel('FPr')
         ax.set_ylabel('TPr')
         ax.set_title('TPr/FPr')
+        fig.set_size_inches(w=(plt.get_current_fig_manager().window.winfo_screenwidth()/100)-1, h=6.5)
 
         XY = np.arange(0, 101, 1)
         ax.fill_between(XY, XY, facecolor='red', alpha=0.65)
@@ -174,6 +177,7 @@ class VisualizarReglas(tk.Frame):
     def DibujarPiramidePoblacion(self, infoReglaFrame):
         fig, ax = plt.subplots()
         cont = 0
+        fig.set_size_inches(w=(plt.get_current_fig_manager().window.winfo_screenwidth()/100)-1, h=6.5)
         for regla in self.controller.reglas:
             ax.barh(cont, regla.tpr, align='center', color='#00B6FF')
             ax.barh(cont, -regla.fpr, align='center', color='#CB3234')

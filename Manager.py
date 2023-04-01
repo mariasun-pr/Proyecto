@@ -16,7 +16,13 @@ class Manager(tk.Tk):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.title("Visualizador algoritmos SD")
-        self.geometry("1000x500")
+        # Obtener el ancho y alto de la pantalla
+        ancho_pantalla = self.winfo_screenwidth()
+        alto_pantalla = self.winfo_screenheight()
+
+        # Establecer el tamaño de la ventana
+        self.geometry("%dx%d+0+0" % (ancho_pantalla, alto_pantalla-80))
+
         self.container = tk.Frame(self) #parent del home. Contiene los frames
         self.container.pack(
             side = tk.TOP,
