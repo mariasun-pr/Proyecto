@@ -1,5 +1,9 @@
+import tkinter as tk
+from utils import style
+from screens.visualizar_lista_reglas import *
 import matplotlib.pyplot as plt
 import numpy as np
+
 
 
 class Regla:
@@ -9,6 +13,12 @@ class Regla:
         self.nombre = nombreRegla
         self.operadores = operadores
         self.datosCubre = []
+
+        self.nombreExportar = None
+        self.graficoPuntos = None
+        self.graficoBarra = None
+        self.tablaDatos = []
+        self.tablaContingencias = None
 
         self.tp = 0
         self.tn = 0
@@ -32,27 +42,43 @@ class Regla:
 
         print(self.datosCubre[0])
 
-        """
-        #!GRÁFICO DE PUNTOS
-        plt.xlim(-1, 101)
-        plt.ylim(-1, 101)
-        plt.xlabel('FPr')
-        plt.ylabel('TPr')
-        plt.title('Scatter Plot')
+    def exportar(self):
+        self.generarNombre()
+        self.dibujarTablaContingencias()
+        self.dibujarGraficoPuntos()
+        self.dibujarGraficoPiramide()
+        self.dibujarTablaDatos()
 
-        XY = np.arange(0, 101, 1)
-        plt.fill_between(XY, XY, facecolor='red', alpha=0.65)
-        plt.scatter(self.fpr, self.tpr, s=110)
-        plt.annotate("  TPr: "+ str(self.tpr)+"\n"+"  FPr: " + str(self.fpr),(self.fpr, self.tpr))
-       
-         """
+    def generarNombre(self):
+        # Crear un objeto de figura de matplotlib
+        fig = plt.figure()
 
-        #!PIRÁMIDE DE POBLACIÓN
-""""
+        # Agregar texto a la figura
+        fig.text(0.5, 0.5, self.nombre, ha='center', va='center')
+        self.nombreExportar = fig
+
+
+    def dibujarGraficoPuntos(self):
         fig, ax = plt.subplots()
+        ax.set_xlim(-1, 101)
+        ax.set_ylim(-1, 101)
+        ax.set_xlabel('FPr')
+        ax.set_ylabel('TPr')
+        ax.set_title('TPr/FPr')
+        fig.set_size_inches(w=(plt.get_current_fig_manager().window.winfo_screenwidth()/100)-1, h=6.5)
+
         XY = np.arange(0, 101, 1)
+        ax.fill_between(XY, XY, facecolor='red', alpha=0.65)
+        ax.scatter(self.fpr, self.tpr, s=110)
+        plt.annotate("  TPr: "+ str(self.tpr)+"\n"+"  FPr: " + str(self.fpr),(self.fpr, self.tpr))
+
+        self.graficoPuntos = fig
+
+    def dibujarGraficoPiramide(self):
+        fig, ax = plt.subplots()
         ax.barh(0, self.tpr, align='center')
         ax.barh(0, -self.fpr, align='center')
+        fig.set_size_inches(w=(plt.get_current_fig_manager().window.winfo_screenwidth()/100)-1, h=6.5)
 
         ax.set_xticks(np.arange(-100, 101, 20))
         ax.set_xticklabels(['100', '80', '60', '40', '20',
@@ -61,26 +87,41 @@ class Regla:
         ax.annotate("FPr: " + str(self.fpr)+ "    " + "TPr: " + str(self.tpr), (-35, 0.175), size=13)
 
         ax.set_xlabel('FPr y TPr')
-        ax.set_ylabel('TPr')
-        ax.set_title('Scatter Plot')
+        ax.set_title('Pirámide FPr/TPr')
         plt.yticks([])
 
-        plt.show()
-"""
+        self.graficoBarra = fig
 
-""""
-        age_groups = ['0-9', '10-19', '20-29', '30-39', '40-49', '50-59', '60+']
-        male_population = [100, 200, 300, 400, 500, 600, 700]
-        female_population = [800, 700, 600, 500, 400, 300, 200]
+    def dibujarTablaDatos(self):
+        contNumDatos = 0
+        tabla = []
 
-        # Create population pyramid
-        fig, ax = plt.subplots()
+        for dato in self.datosCubre:
+            tabla.append(dato)
+            contNumDatos+=1
 
-        ax.barh(1, male_population)
-        ax.barh(1, female_population)
+            # 50 el número de entradas de la tabla en una página.
+            if (contNumDatos % 50 == 0 or contNumDatos == len(self.datosCubre)):
+                # Guardar la tabla en una imagen
+                fig = plt.figure(figsize=(8.27, 12), dpi=300)
+                if(contNumDatos == 50 or contNumDatos == len(self.datosCubre)):
+                    fig.text(0.5, 0.85, "Tabla de los datos que cubre la regla", ha='center', va='center', fontsize = 20)
+                ax = fig.add_subplot(111)
+                ax.axis('off')
+                ax.table(cellText=tabla, loc='center')
+                self.tablaDatos.append(fig)
+                tabla = []
 
-        ax.set_xlabel('Population')
-        ax.set_ylabel('Age Group')
-        ax.set_title('Population Pyramid')
+    def dibujarTablaContingencias(self):
+        tabla = [["True positive (tp)","False positive (fp)"],
+                 [str(self.tp),str(self.fp)],
+                 ["True negative (tn)","False negative (fn)"],
+                 [str(self.tn),str(self.fn)]]
 
-        plt.show()"""
+        fig = plt.figure(figsize=(8, 5), dpi=300)
+        fig.text(0.5, 0.65, "Tabla de contingencias", ha='center', va='center', fontsize= 20)
+        ax = fig.add_subplot(111)
+        ax.axis('off')
+        ax.table(cellText=tabla, cellLoc='center', loc='center')
+        self.tablaContingencias = fig
+

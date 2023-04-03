@@ -240,21 +240,8 @@ class VisualizarInfoRegla(tk.Frame):
                           style.STYLE_TEXT, relief=tk.GROOVE,)
         
     def dibujarGraficoPuntos(self, infoReglaFrame):
-        fig, ax = plt.subplots()
-        ax.set_xlim(-1, 101)
-        ax.set_ylim(-1, 101)
-        ax.set_xlabel('FPr')
-        ax.set_ylabel('TPr')
-        ax.set_title('TPr/FPr')
-        fig.set_size_inches(w=(plt.get_current_fig_manager().window.winfo_screenwidth()/100)-1, h=6.5)
-
-        XY = np.arange(0, 101, 1)
-        ax.fill_between(XY, XY, facecolor='red', alpha=0.65)
-        ax.scatter(self.regla.fpr, self.regla.tpr, s=110)
-        plt.annotate("  TPr: "+ str(self.regla.tpr)+"\n"+"  FPr: " + str(self.regla.fpr),(self.regla.fpr, self.regla.tpr))
-
         # Create canvas
-        canvas = FigureCanvasTkAgg(fig, master=infoReglaFrame)
+        canvas = FigureCanvasTkAgg(self.regla.graficoPuntos, master=infoReglaFrame)
         canvas.draw()
 
         # Add canvas to Tkinter window
@@ -267,23 +254,8 @@ class VisualizarInfoRegla(tk.Frame):
         )
 
     def dibujarPiramidePoblacion(self, infoReglaFrame):
-        fig, ax = plt.subplots()
-        ax.barh(0, self.regla.tpr, align='center')
-        ax.barh(0, -self.regla.fpr, align='center')
-        fig.set_size_inches(w=(plt.get_current_fig_manager().window.winfo_screenwidth()/100)-1, h=6.5)
-
-        ax.set_xticks(np.arange(-100, 101, 20))
-        ax.set_xticklabels(['100', '80', '60', '40', '20',
-                           '0', '20', '40', '60', '80', '100'])
-        plt.ylim(0, 0.2)
-        ax.annotate("FPr: " + str(self.regla.fpr)+ "    " + "TPr: " + str(self.regla.tpr), (-35, 0.175), size=13)
-
-        ax.set_xlabel('FPr y TPr')
-        ax.set_title('Pirámide FPr/TPr')
-        plt.yticks([])
-
         # Create canvas
-        canvas = FigureCanvasTkAgg(fig, master=infoReglaFrame)
+        canvas = FigureCanvasTkAgg(self.regla.graficoBarra, master=infoReglaFrame)
         canvas.draw()
 
         # Add canvas to Tkinter window
@@ -327,5 +299,7 @@ class VisualizarInfoRegla(tk.Frame):
                           style.STYLE_TEXT, relief=tk.GROOVE,)
             
             cont+=1
+
+    
 
 

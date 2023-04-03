@@ -173,6 +173,7 @@ class Importar(tk.Frame):
 
     def leerFicheros(self):
         algoritmo = self.leerCabeceraRegla(self.filenameReglas.get())       #Se obtiene el algoritmo que ha generado las reglas
+        self.controller.nombreAlgoritmo = algoritmo
 
         if(algoritmo not in ALGORITMOS_VALIDOS):
             MessageBox.showerror(

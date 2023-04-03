@@ -6,6 +6,7 @@ from screens.regla_screen import *
 import sys
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_pdf import PdfPages
 import numpy as np
 
 
@@ -17,6 +18,10 @@ class VisualizarReglas(tk.Frame):
         self.canvas = tk.Canvas
 
         self.hecho = False
+
+        self.figGraf1 = None
+        self.figGraf2 = None
+        self.tablaDatos = []
 
     def move_to_regla(self, regla):
         self.controller.reglaSeleccionada = regla
@@ -66,8 +71,10 @@ class VisualizarReglas(tk.Frame):
             pady=11,
             sticky=tk.W,
         )
+
         inicioFrame.grid_columnconfigure(0, weight=1)
         inicioFrame.grid_columnconfigure(1, weight=1)
+        inicioFrame.grid_columnconfigure(2, weight=1)
 
         reglasFrame = tk.Frame(self)
         reglasFrame.configure(background=style.COLOR_BACKGROUND,)
@@ -90,9 +97,7 @@ class VisualizarReglas(tk.Frame):
                               background=style.COLOR_BACKGROUND,
                               borderwidth=0,
                               highlightthickness=0)
-
-
-
+        
         frame_canvas = tk.Frame(self.canvas)
         frame_canvas.configure(background=style.COLOR_BACKGROUND)
         frame_canvas.grid_columnconfigure(0, weight=1)
@@ -126,6 +131,20 @@ class VisualizarReglas(tk.Frame):
         self.canvas.bind('<Configure>', lambda e: self.canvas.configure(
             scrollregion=self.canvas.bbox(tk.ALL)))
 
+        tk.Button(
+            inicioFrame,
+            text="Exportar",
+            command=lambda: self.exportar(),
+            **style.STYLE_BUTTON,
+            font=("Arial", 20)
+        ).grid(
+            row=0,
+            column=2,
+            padx=15,
+            pady=11,
+            sticky=tk.E,
+        )
+
     def AccesoReglaIndividual(self, frame_canvas):
         cont = 0
         for regla in self.controller.reglas:
@@ -152,14 +171,16 @@ class VisualizarReglas(tk.Frame):
         ax.set_xlabel('FPr')
         ax.set_ylabel('TPr')
         ax.set_title('TPr/FPr')
-        fig.set_size_inches(w=(plt.get_current_fig_manager().window.winfo_screenwidth()/100)-1, h=6.5)
+        fig.set_size_inches(
+            w=(plt.get_current_fig_manager().window.winfo_screenwidth()/100)-1, h=6.5)
 
         XY = np.arange(0, 101, 1)
         ax.fill_between(XY, XY, facecolor='red', alpha=0.65)
         for regla in self.controller.reglas:
             ax.scatter(regla.fpr, regla.tpr, s=110)
             nombreSeparado = regla.nombre.split(' ')
-            plt.annotate("      "+nombreSeparado[0]+" "+nombreSeparado[1], (regla.fpr, regla.tpr))
+            plt.annotate(
+                "      "+nombreSeparado[0]+" "+nombreSeparado[1], (regla.fpr, regla.tpr))
 
         # Create canvas
         canvas = FigureCanvasTkAgg(fig, master=infoReglaFrame)
@@ -174,17 +195,21 @@ class VisualizarReglas(tk.Frame):
             pady=13,
         )
 
+        self.figGraf1 = fig
+
     def DibujarPiramidePoblacion(self, infoReglaFrame):
         fig, ax = plt.subplots()
         cont = 0
-        fig.set_size_inches(w=(plt.get_current_fig_manager().window.winfo_screenwidth()/100)-1, h=6.5)
+        fig.set_size_inches(
+            w=(plt.get_current_fig_manager().window.winfo_screenwidth()/100)-1, h=6.5)
         for regla in self.controller.reglas:
             ax.barh(cont, regla.tpr, align='center', color='#00B6FF')
             ax.barh(cont, -regla.fpr, align='center', color='#CB3234')
             nombreSeparado = regla.nombre.split(' ')
-            ax.annotate(nombreSeparado[0]+" "+nombreSeparado[1], (-10, cont), size=11)
-            #ax.annotate("FPr: " + str(regla.fpr)+ "         " + "TPr: " + str(regla.tpr), (-35, cont-0.2), size=11)
-            cont+=1
+            ax.annotate(nombreSeparado[0]+" " +
+                        nombreSeparado[1], (-10, cont), size=11)
+            # ax.annotate("FPr: " + str(regla.fpr)+ "         " + "TPr: " + str(regla.tpr), (-35, cont-0.2), size=11)
+            cont += 1
 
         ax.set_xticks(np.arange(-100, 101, 20))
         ax.set_xticklabels(['100', '80', '60', '40', '20',
@@ -207,6 +232,8 @@ class VisualizarReglas(tk.Frame):
             pady=13,
         )
 
+        self.figGraf2 = fig
+
     def TablaDatosCubreRegla(self, infoReglaFrame):
         tituloTabla = tk.Entry(
             infoReglaFrame,
@@ -220,10 +247,13 @@ class VisualizarReglas(tk.Frame):
         )
         tituloTabla.insert(tk.END, "Reglas que cubren a cada dato")
         tituloTabla.configure(state=tk.DISABLED, **
-                     style.STYLE_TITULO_TABLA, relief=tk.GROOVE,)
-        
+                              style.STYLE_TITULO_TABLA, relief=tk.GROOVE,)
+
         cont = len(self.controller.reglas)+3
+        contNumDatos = 0
+        tabla = []
         for dato in self.controller.dataset.datos:
+            fila_tabla = []
             entradaTabla = tk.Entry(
                 infoReglaFrame,
                 justify=tk.CENTER,
@@ -235,8 +265,9 @@ class VisualizarReglas(tk.Frame):
             )
             entradaTabla.insert(tk.END, dato)
             entradaTabla.configure(state=tk.DISABLED, **
-                          style.STYLE_TEXT, relief=tk.GROOVE,)
-            
+                                   style.STYLE_TEXT, relief=tk.GROOVE,)
+            fila_tabla.append(entradaTabla.get())
+
             entradaReglas = tk.Entry(
                 infoReglaFrame,
                 justify=tk.CENTER,
@@ -246,11 +277,77 @@ class VisualizarReglas(tk.Frame):
                 column=1,
                 sticky=tk.NSEW,
             )
-            texto = self.controller.dataset.reglasCubren[self.controller.dataset.datos.index(dato)]
-            if(texto == None):
+            texto = self.controller.dataset.reglasCubren[self.controller.dataset.datos.index(
+                dato)]
+            if (texto == None):
                 texto = ''
             entradaReglas.insert(tk.END, texto)
             entradaReglas.configure(state=tk.DISABLED, **
-                          style.STYLE_TEXT, relief=tk.GROOVE,)
-            
-            cont+=1
+                                    style.STYLE_TEXT, relief=tk.GROOVE,)
+            fila_tabla.append(entradaReglas.get())
+
+            cont += 1
+            contNumDatos += 1
+            tabla.append(fila_tabla)
+
+            # 30 el número de entradas de la tabla en una página.
+            if (contNumDatos % 50 == 0 or contNumDatos == len(self.controller.dataset.datos)):
+                # Guardar la tabla en una imagen
+                fig = plt.figure(figsize=(8.27, 12), dpi=300)
+                ax = fig.add_subplot(111)
+                ax.axis('off')
+                ax.table(cellText=tabla, cellLoc='center', loc='center')
+                self.tablaDatos.append(fig)
+                tabla = []
+
+    def exportar(self):
+        self.exportacionGeneral()
+        self.exportacionReglaIndividual()
+        self.ventanaNotificacion()
+
+    def exportacionGeneral(self):
+        nombreFichero = "informacion_general_"+self.controller.nombreAlgoritmo+".pdf"
+        with PdfPages(nombreFichero) as pdf:
+            pdf.savefig(self.figGraf1)
+            pdf.savefig(self.figGraf2)
+            for page in self.tablaDatos:
+                pdf.savefig(page)
+
+    def exportacionReglaIndividual(self):
+        nombreFichero = "informacion_reglas_"+self.controller.nombreAlgoritmo+".pdf"
+        with PdfPages(nombreFichero) as pdf:
+            for regla in self.controller.reglas:
+                regla.exportar()
+                pdf.savefig(regla.nombreExportar)
+                pdf.savefig(regla.tablaContingencias)
+                pdf.savefig(regla.graficoPuntos)
+                pdf.savefig(regla.graficoBarra)
+                for page in regla.tablaDatos:
+                    pdf.savefig(page)
+
+
+    def ventanaNotificacion(self):
+        ventana = tk.Toplevel()
+        ventana.title("Notificación")  # Establecer el título de la ventana
+        ventana.geometry("300x100")
+        ventana.resizable(False, False)
+
+        # Obtener la resolución de la pantalla
+        screen_width = ventana.winfo_screenwidth()
+        screen_height = ventana.winfo_screenheight()
+        
+        # Calcular la posición del Toplevel en el centro
+        x = int((screen_width - ventana.winfo_reqwidth()) / 2)
+        y = int((screen_height - ventana.winfo_reqheight()) / 2)
+        
+        # Establecer la posición del Toplevel en el centro
+        ventana.geometry("+{}+{}".format(x, y))
+        
+        # Crear un label con el mensaje de notificación
+        tk.Label(ventana, text="Ha finalizado la exportación", font=("Arial", 12)).pack(pady=10)
+        
+        # Configurar la ventana de notificación para que desaparezca en 3 segundos
+        ventana.after(3000, ventana.destroy)
+        
+        # Mostrar la ventana de notificación
+        ventana.deiconify()
