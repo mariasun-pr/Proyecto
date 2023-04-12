@@ -6,6 +6,7 @@ class lecturaDataset:
     def __init__(self, nombreFichero, algoritmo):
         self.nombreFichero = nombreFichero
         self.algoritmo = algoritmo
+        self.intervalos = []
 
     def lecturaFichero(self):
         fichero = open(self.nombreFichero)
@@ -34,11 +35,18 @@ class lecturaDataset:
 
             # Comprobar tipo de atributo del dataset
             elif("@attribute" in lineas[i] and not compruebaDiscreto):
-                if("real" in lineas[i] and self.algoritmo in ALGORITMOS_NO_CONTINUOS):
+                if("real" in lineas[i] and self.algoritmo not in ALGORITMOS_EVOLUTIVOS):
                     print("Tiene que ser el dataset discretizado")
                     return "No discretizado"
                 else:
                     compruebaDiscreto = True
+
+            #Obtener intervalo real 
+            if("@attribute" in linea and "real" in linea):
+                linea = lineas[i].split(" ")
+                intervalo = linea[len(linea)-2] + linea[len(linea)-1]
+                print(intervalo)
+                self.intervalos.append(intervalo)
 
             # Obtener atributos del dataset
             elif("@inputs" in lineas[i]):
@@ -60,29 +68,9 @@ class lecturaDataset:
 
         # Inicializo el atributo que almacen las reglas que cubren al dato
         self.reglasCubren = [None] * len(self.datos)
-        #!Probablemente borrar línea de abajo y función
-        # self.tratarDataset()
 
         # Si la carga se ha producido correctamente
         return "True"
-
-    def tratarDataset(self):
-        self.valoresAtributoPorClase = []
-
-        for clase in self.clases:
-            valorAtributos = [None] * len(self.atributos)
-            for dato in self.datos:
-                if(clase in dato):
-                    for i in range(len(self.atributos)):
-                        if(valorAtributos[i] == None):
-                            valorAtributos[i] = dato[i]
-                        elif (dato[i] not in valorAtributos[i]):
-                            valorAtributos[i] = valorAtributos[i] + \
-                                ' ' + dato[i]
-
-            self.valoresAtributoPorClase.append(valorAtributos)
-
-            print(valorAtributos)
 
     def anadirRegla(self, dato, regla):
         nombreRegla = re.sub(r':.*', "", regla.nombre)

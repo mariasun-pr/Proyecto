@@ -1,20 +1,19 @@
 from Manager import Manager
 from lectura_ficheros.dataset import *
-from lectura_ficheros.apriori import *
-from utils.evaluaciónReglas import *
+from lectura_ficheros.evolutivos import *
+from utils.evaluacionReglasNoDiscretizado import *
 
 if __name__ == "__main__":
-    #pruebaD = lecturaDataset(r'C:\Users\padir\Desktop\p\p\datasets\Fayyad-D.iris\Fayyad-D.iris-10-1tra.dat','fhg')
+    
+    #pruebaD = lecturaDataset(r'C:\Users\padir\Desktop\experimentos\nmef SinDis\datasets\iris\iris-10-1tra.dat','nmeef')
     
     #pruebaD.lecturaFichero()
 
-    #prueba = LecturaApriori()
-   # prueba.lecturaFichero(r'C:\Users\padir\Desktop\p\p\results\Fayyad-D.Apriori-SD.iris\result0e0.txt',pruebaD)
+    #prueba = Evolutivos()
+    #prueba.lecturaFichero(r'C:\Users\padir\Desktop\experimentos\nmef SinDis\results\NMEEF-SD.iris\result0e0SD.txt',pruebaD)
 
-   # evaluador = evaluacionReglas()
-   # evaluador.evaluarReglas(pruebaD, prueba)
-
+    #evaluador = evaluacionReglasNoDiscretizado()
+    #evaluador.evaluarReglas(pruebaD, prueba.reglas)
+    
     app = Manager()
     app.mainloop()
-
-

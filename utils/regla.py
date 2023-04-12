@@ -7,12 +7,13 @@ import numpy as np
 
 
 class Regla:
-    def __init__(self, valoresAtributos, clase, nombreRegla, operadores):
+    def __init__(self, valoresAtributos, clase, nombreRegla, operadores, numE):
         self.atributos = valoresAtributos
         self.clase = clase
         self.nombre = nombreRegla
         self.operadores = operadores
         self.datosCubre = []
+        self.numEtiquetas = numE
 
         self.nombreExportar = None
         self.graficoPuntos = None
@@ -40,7 +41,7 @@ class Regla:
         print("tpr:" + str(self.tpr))
         print("fpr:" + str(self.fpr))
 
-        print(self.datosCubre[0])
+        #print(self.datosCubre[0])
 
     def exportar(self):
         self.generarNombre()

@@ -12,6 +12,7 @@ class Evolutivos(lecturaFicheroReglas):
         self.reglas = []
         numAtributos = len(dataset.atributos)
         numRegla = 1
+        numEtiquetas = 0
 
         for i in range(len(lineas)):
             linea = lineas[i]
@@ -25,18 +26,26 @@ class Evolutivos(lecturaFicheroReglas):
 
             elif(linea.__contains__('Variable')):
                 linea = linea.split(' ')
-                if(not lineas[i+1].__contains__('Consecuent')):
-                    nombreRegla += linea[1] + " "+ linea[2] + " " +linea[3] + " AND "
+                if(linea.__contains__('Label')):
+                    valor = 4
                 else:
-                    nombreRegla += linea[1] + " "+ linea[2] + " " +linea[3]
+                    valor = 3
+                if(not lineas[i+1].__contains__('Consecuent')):
+                    nombreRegla += linea[1] + " "+ linea[2] + " " +linea[valor] + " AND "
+                else:
+                    nombreRegla += linea[1] + " "+ linea[2] + " " +linea[valor]
 
                 try:
                     index = dataset.atributos.index(linea[1])
                 except:
                     print('Error')
 
-                valorAtributos[index] = linea[3]
+                valorAtributos[index] = linea[valor]
                 operadores[index] = linea[2]
+
+            elif(linea.__contains__('Number of labels')):
+                linea = linea.replace('Number of labels: ', '')
+                numEtiquetas = int(linea)
 
             elif(linea.__contains__('Consecuent')):
                 linea = linea.replace('   ', '')
@@ -44,7 +53,7 @@ class Evolutivos(lecturaFicheroReglas):
                 clase = linea[1]
                 nombreRegla += " THEN class = " + linea[1]
 
-                regla = Regla(valorAtributos, clase, nombreRegla, operadores)
+                regla = Regla(valorAtributos, clase, nombreRegla, operadores, numEtiquetas)
                 self.reglas.append(regla)
 
         return self.reglas
