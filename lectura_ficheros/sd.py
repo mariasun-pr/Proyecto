@@ -43,7 +43,7 @@ class Sd(lecturaFicheroReglas):
 
                 clase = linea[index + 1]
 
-                regla = Regla(valorAtributos, clase, nombreRegla, operadores)
+                regla = Regla(valorAtributos, clase, nombreRegla, operadores, -1)
                 self.reglas.append(regla)
 
         return self.reglas

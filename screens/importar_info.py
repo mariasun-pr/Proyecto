@@ -10,6 +10,7 @@ from lectura_ficheros.sd import *
 from lectura_ficheros.sd_map import *
 from lectura_ficheros.evolutivos import *
 from utils.evaluaciónReglas import *
+from utils.evaluacionReglasNoDiscretizado import *
 from utils.constantes import *
 
 
@@ -172,25 +173,12 @@ class Importar(tk.Frame):
 
 
     def leerFicheros(self):
-        algoritmo = self.leerCabeceraRegla(self.filenameReglas.get())       #Se obtiene el algoritmo que ha generado las reglas
+        algoritmo, discretizado = self.leerCabeceraRegla(self.filenameReglas.get())       #Se obtiene el algoritmo que ha generado las reglas
         self.controller.nombreAlgoritmo = algoritmo
 
-        if(algoritmo not in ALGORITMOS_VALIDOS):
-            MessageBox.showerror(
-                "Error", "El algoritmo no está registrado en la aplicación")
-            self.botonSiguiente.config(state=tk.DISABLED)
-            return
-
         dataset = lecturaDataset(self.filenameDatos.get(), algoritmo)
-        if(dataset.lecturaFichero() == "No discretizado"):
-            MessageBox.showerror(
-                "Error", "El algoritmo necesita el conjunto de datos discretizado")
-            self.botonSiguiente.config(state=tk.DISABLED)
-            return
-        elif(dataset.lecturaFichero() == "Formato incorrecto"):
-            MessageBox.showerror(
-                "Error", "El formato del contenido del archivo es incorrecto")
-            self.botonSiguiente.config(state=tk.DISABLED)
+        salidaDataset = dataset.lecturaFichero(discretizado)
+        if(self.comprobacionErroresLectura(algoritmo, salidaDataset)): #Hay fallos
             return
 
         self.controller.dataset = dataset
@@ -210,8 +198,32 @@ class Importar(tk.Frame):
         elif(algoritmo in ALGORITMOS_EVOLUTIVOS):
             self.controller.reglas = self.algoritmos[Evolutivos].lecturaFichero(self.filenameReglas.get(), dataset)        
 
-        evaluador = evaluacionReglas()
-        evaluador.evaluarReglas(dataset, self.controller.reglas)
+        if(self.controller.reglas[0].numEtiquetas > 0):
+            evaluador = evaluacionReglasNoDiscretizado()
+            evaluador.evaluarReglas(dataset, self.controller.reglas)
+        else:
+            evaluador = evaluacionReglas()
+            evaluador.evaluarReglas(dataset, self.controller.reglas)
+
+    def comprobacionErroresLectura(self, algoritmo, salidaDataset):
+        if(algoritmo not in ALGORITMOS_VALIDOS):
+            MessageBox.showerror(
+                "Error", "El algoritmo no está registrado en la aplicación")
+            self.botonSiguiente.config(state=tk.DISABLED)
+            return True
+
+        if(salidaDataset == "No discretizado"):
+            MessageBox.showerror(
+                "Error", "El algoritmo necesita el conjunto de datos discretizado")
+            self.botonSiguiente.config(state=tk.DISABLED)
+            return True
+        
+        elif(salidaDataset == "Formato incorrecto"):
+            MessageBox.showerror(
+                "Error", "El formato del contenido del archivo es incorrecto")
+            self.botonSiguiente.config(state=tk.DISABLED)
+            return True
+
 
     #Inicialización de los algoritmos que lee la aplicación
     def definirAlgoritmos(self):
@@ -226,4 +238,9 @@ class Importar(tk.Frame):
         linea = fichero.readline()
         linea = linea.rstrip()
         algoritmo = linea.replace('@algorithm ', '')
-        return algoritmo
+
+        texto = fichero.read()
+        if 'Number of labels: ' in texto:
+            return algoritmo, False
+        else:
+            return algoritmo, True

@@ -12,7 +12,7 @@ class Evolutivos(lecturaFicheroReglas):
         self.reglas = []
         numAtributos = len(dataset.atributos)
         numRegla = 1
-        numEtiquetas = 0
+        numEtiquetas = -1
 
         for i in range(len(lineas)):
             linea = lineas[i]

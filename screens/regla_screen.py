@@ -30,6 +30,7 @@ class VisualizarInfoRegla(tk.Frame):
 
     def init_widgets(self):
         self.regla = self.controller.reglaSeleccionada
+        self.regla.generarGraficos()
         inicioFrame = tk.Frame(self)
         inicioFrame.configure(background=style.COLOR_BACKGROUND,)
         inicioFrame.pack(

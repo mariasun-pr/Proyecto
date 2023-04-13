@@ -8,7 +8,7 @@ class lecturaDataset:
         self.algoritmo = algoritmo
         self.intervalos = []
 
-    def lecturaFichero(self):
+    def lecturaFichero(self, discretizado):
         fichero = open(self.nombreFichero)
         lineas = fichero.readlines()
 
@@ -35,7 +35,7 @@ class lecturaDataset:
 
             # Comprobar tipo de atributo del dataset
             elif("@attribute" in lineas[i] and not compruebaDiscreto):
-                if("real" in lineas[i] and self.algoritmo not in ALGORITMOS_EVOLUTIVOS):
+                if(("real" in lineas[i] and self.algoritmo not in ALGORITMOS_EVOLUTIVOS) or (discretizado and self.algoritmo in ALGORITMOS_EVOLUTIVOS)):
                     print("Tiene que ser el dataset discretizado")
                     return "No discretizado"
                 else:

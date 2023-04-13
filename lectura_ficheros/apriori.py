@@ -43,7 +43,7 @@ class Apriori(lecturaFicheroReglas):
 
                 clase = linea[index + 1]
 
-                regla = Regla(valorAtributos, clase, nombreRegla, operadores, 0)
+                regla = Regla(valorAtributos, clase, nombreRegla, operadores, -1)
                 self.reglas.append(regla)
 
         return self.reglas

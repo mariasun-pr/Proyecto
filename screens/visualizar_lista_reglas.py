@@ -136,7 +136,7 @@ class VisualizarReglas(tk.Frame):
             text="Exportar",
             command=lambda: self.exportar(),
             **style.STYLE_BUTTON,
-            font=("Arial", 20)
+            font=("Arial", 18)
         ).grid(
             row=0,
             column=2,
@@ -179,6 +179,7 @@ class VisualizarReglas(tk.Frame):
         for regla in self.controller.reglas:
             ax.scatter(regla.fpr, regla.tpr, s=110)
             nombreSeparado = regla.nombre.split(' ')
+            nombreSeparado[1].replace(':', '')
             plt.annotate(
                 "      "+nombreSeparado[0]+" "+nombreSeparado[1], (regla.fpr, regla.tpr))
 
@@ -203,12 +204,12 @@ class VisualizarReglas(tk.Frame):
         fig.set_size_inches(
             w=(plt.get_current_fig_manager().window.winfo_screenwidth()/100)-1, h=6.5)
         for regla in self.controller.reglas:
-            ax.barh(cont, regla.tpr, align='center', color='#00B6FF')
-            ax.barh(cont, -regla.fpr, align='center', color='#CB3234')
+            ax.barh(cont, regla.tpr, align='center', color='#1F77B4')
+            ax.barh(cont, -regla.fpr, align='center', color='#FF7F0E')
             nombreSeparado = regla.nombre.split(' ')
+            nombreSeparado[1].replace(':', '')
             ax.annotate(nombreSeparado[0]+" " +
                         nombreSeparado[1], (-10, cont), size=11)
-            # ax.annotate("FPr: " + str(regla.fpr)+ "         " + "TPr: " + str(regla.tpr), (-35, cont-0.2), size=11)
             cont += 1
 
         ax.set_xticks(np.arange(-100, 101, 20))
@@ -317,7 +318,7 @@ class VisualizarReglas(tk.Frame):
         nombreFichero = "informacion_reglas_"+self.controller.nombreAlgoritmo+".pdf"
         with PdfPages(nombreFichero) as pdf:
             for regla in self.controller.reglas:
-                regla.exportar()
+                regla.generarGraficos()
                 pdf.savefig(regla.nombreExportar)
                 pdf.savefig(regla.tablaContingencias)
                 pdf.savefig(regla.graficoPuntos)

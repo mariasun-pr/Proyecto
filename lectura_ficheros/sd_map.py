@@ -54,7 +54,7 @@ class SdMap(lecturaFicheroReglas):
 
                 clase = linea[index + 3]
 
-                regla = Regla(valorAtributos, clase, nombreRegla, operadores)
+                regla = Regla(valorAtributos, clase, nombreRegla, operadores, -1)
                 self.reglas.append(regla)
 
         return self.reglas

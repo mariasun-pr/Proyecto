@@ -43,12 +43,13 @@ class Regla:
 
         #print(self.datosCubre[0])
 
-    def exportar(self):
-        self.generarNombre()
-        self.dibujarTablaContingencias()
-        self.dibujarGraficoPuntos()
-        self.dibujarGraficoPiramide()
-        self.dibujarTablaDatos()
+    def generarGraficos(self):
+        if(self.graficoBarra == None):
+            self.generarNombre()
+            self.dibujarTablaContingencias()
+            self.dibujarGraficoPuntos()
+            self.dibujarGraficoPiramide()
+            self.dibujarTablaDatos()
 
     def generarNombre(self):
         # Crear un objeto de figura de matplotlib
@@ -57,6 +58,8 @@ class Regla:
         # Agregar texto a la figura
         fig.text(0.5, 0.5, self.nombre, ha='center', va='center')
         self.nombreExportar = fig
+
+        plt.close()
 
 
     def dibujarGraficoPuntos(self):
@@ -75,6 +78,8 @@ class Regla:
 
         self.graficoPuntos = fig
 
+        plt.close()
+
     def dibujarGraficoPiramide(self):
         fig, ax = plt.subplots()
         ax.barh(0, self.tpr, align='center')
@@ -92,6 +97,8 @@ class Regla:
         plt.yticks([])
 
         self.graficoBarra = fig
+
+        plt.close()
 
     def dibujarTablaDatos(self):
         contNumDatos = 0
@@ -112,6 +119,7 @@ class Regla:
                 ax.table(cellText=tabla, loc='center')
                 self.tablaDatos.append(fig)
                 tabla = []
+                plt.close()
 
     def dibujarTablaContingencias(self):
         tabla = [["True positive (tp)","False positive (fp)"],
@@ -123,6 +131,11 @@ class Regla:
         fig.text(0.5, 0.65, "Tabla de contingencias", ha='center', va='center', fontsize= 20)
         ax = fig.add_subplot(111)
         ax.axis('off')
-        ax.table(cellText=tabla, cellLoc='center', loc='center')
+        table = ax.table(cellText=tabla, cellLoc='center', loc='center')
+        table[0,0].set_facecolor('lightgray')
+        table[0,1].set_facecolor('lightgray')
+        table[2,0].set_facecolor('lightgray')
+        table[2,1].set_facecolor('lightgray')
         self.tablaContingencias = fig
+        plt.close()
 
