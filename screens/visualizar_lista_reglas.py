@@ -8,6 +8,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 import numpy as np
+from tkinter import filedialog
 
 
 class VisualizarReglas(tk.Frame):
@@ -300,20 +301,24 @@ class VisualizarReglas(tk.Frame):
                 tabla = []
 
     def exportar(self):
-        self.exportacionGeneral()
-        self.exportacionReglaIndividual()
+        nombreFichero = self.exportacionGeneral()
+        self.exportacionReglaIndividual(nombreFichero)
         self.ventanaNotificacion()
 
     def exportacionGeneral(self):
-        nombreFichero = "informacion_general_"+self.controller.nombreAlgoritmo+".pdf"
-        with PdfPages(nombreFichero) as pdf:
-            pdf.savefig(self.figGraf1)
-            pdf.savefig(self.figGraf2)
-            for page in self.tablaDatos:
-                pdf.savefig(page)
+        #nombreFichero = "informacion_general_"+self.controller.nombreAlgoritmo+".pdf"
+        nombreFichero = filedialog.asksaveasfile(defaultextension=".pdf", filetypes=[("PDF Files", ".pdf"),("All files", "*.*")],initialfile="informacion_general_"+self.controller.nombreAlgoritmo+".pdf")
+        if nombreFichero:
+            with PdfPages(nombreFichero.name) as pdf:
+                pdf.savefig(self.figGraf1)
+                pdf.savefig(self.figGraf2)
+                for page in self.tablaDatos:
+                    pdf.savefig(page)
+            return nombreFichero.name
 
-    def exportacionReglaIndividual(self):
-        nombreFichero = "informacion_reglas_"+self.controller.nombreAlgoritmo+".pdf"
+    def exportacionReglaIndividual(self, nombreFichero):
+        nombreFichero = nombreFichero.replace('.pdf','')
+        nombreFichero = nombreFichero + "_reglas.pdf"
         with PdfPages(nombreFichero) as pdf:
             for regla in self.controller.reglas:
                 regla.generarGraficos()
