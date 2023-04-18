@@ -179,7 +179,6 @@ class VisualizarReglas(tk.Frame):
         for regla in self.controller.reglas:
             ax.scatter(regla.fpr, regla.tpr, s=110)
             nombreSeparado = regla.nombre.split(' ')
-            nombreSeparado[1].replace(':', '')
             plt.annotate(
                 "      "+nombreSeparado[0]+" "+nombreSeparado[1], (regla.fpr, regla.tpr))
 
@@ -207,7 +206,6 @@ class VisualizarReglas(tk.Frame):
             ax.barh(cont, regla.tpr, align='center', color='#1F77B4')
             ax.barh(cont, -regla.fpr, align='center', color='#FF7F0E')
             nombreSeparado = regla.nombre.split(' ')
-            nombreSeparado[1].replace(':', '')
             ax.annotate(nombreSeparado[0]+" " +
                         nombreSeparado[1], (-10, cont), size=11)
             cont += 1

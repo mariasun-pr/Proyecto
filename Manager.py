@@ -22,7 +22,7 @@ class Manager(tk.Tk):
         alto_pantalla = self.winfo_screenheight()
 
         # Establecer el tamaño de la ventana
-        self.geometry("%dx%d+0+0" % (ancho_pantalla, alto_pantalla-80))
+        self.geometry("%dx%d+0+0" % (ancho_pantalla, alto_pantalla-75))
 
         self.container = tk.Frame(self) #parent del home. Contiene los frames
         self.container.pack(

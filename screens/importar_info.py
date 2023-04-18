@@ -206,6 +206,12 @@ class Importar(tk.Frame):
             evaluador.evaluarReglas(dataset, self.controller.reglas)
 
     def comprobacionErroresLectura(self, algoritmo, salidaDataset):
+        if(algoritmo == 'error'):
+            MessageBox.showerror(
+                "Error", "El fichero de reglas no es correcto")
+            self.botonSiguiente.config(state=tk.DISABLED)
+            return True
+
         if(algoritmo not in ALGORITMOS_VALIDOS):
             MessageBox.showerror(
                 "Error", "El algoritmo no está registrado en la aplicación")
@@ -221,6 +227,12 @@ class Importar(tk.Frame):
         elif(salidaDataset == "Formato incorrecto"):
             MessageBox.showerror(
                 "Error", "El formato del contenido del archivo es incorrecto")
+            self.botonSiguiente.config(state=tk.DISABLED)
+            return True
+        
+        elif(salidaDataset == "Discretizado"):
+            MessageBox.showerror(
+                "Error", "El conjunto de datos está discretizado y el algoritmo no lo necesita")
             self.botonSiguiente.config(state=tk.DISABLED)
             return True
 
@@ -240,7 +252,12 @@ class Importar(tk.Frame):
         algoritmo = linea.replace('@algorithm ', '')
 
         texto = fichero.read()
+        if 'Rule' not in texto and 'RULE' not in texto:
+            return "error", False
+
         if 'Number of labels: ' in texto:
             return algoritmo, False
         else:
             return algoritmo, True
+        
+

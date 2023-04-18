@@ -1,5 +1,4 @@
 import tkinter as tk
-from tkinter import ttk
 from utils import style
 from screens.visualizar_lista_reglas import *
 import sys
