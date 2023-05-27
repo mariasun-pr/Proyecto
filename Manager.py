@@ -35,9 +35,8 @@ class Manager(tk.Tk):
         self.container.grid_rowconfigure(0,weight=1)#El peso lo que ocupa la columna respecto el otro
 
         self.frames = {} #Diccionario de clase
-        for F in (Home, Importar, VisualizarReglas, VisualizarInfoRegla): #Modificar aquí para añadir pantallas
+        for F in (Home, Importar, VisualizarReglas, VisualizarInfoRegla): #!Modificar aquí para añadir vistas
             frame = F(self.container, self)
-            #frame.init_widgets()
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky=tk.NSEW) 
         self.show_frame(Home, False)
@@ -47,7 +46,6 @@ class Manager(tk.Tk):
         if(not hecho):
             frame.init_widgets()
         frame.tkraise()
-        # self.container.update()
     
     def get_frame(self, nombreVentana):
         if nombreVentana == "Importar":

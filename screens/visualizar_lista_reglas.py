@@ -3,7 +3,6 @@ import sys
 from tkinter import filedialog
 from utils import style
 from screens.regla_screen import *
-import sys
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
@@ -290,7 +289,7 @@ class VisualizarReglas(tk.Frame):
             contNumDatos += 1
             tabla.append(fila_tabla)
 
-            # 30 el número de entradas de la tabla en una página.
+            # 50 el número de entradas de la tabla en una página.
             if (contNumDatos % 50 == 0 or contNumDatos == len(self.controller.dataset.datos)):
                 # Guardar la tabla en una imagen
                 fig = plt.figure(figsize=(8.27, 12), dpi=300)
@@ -314,20 +313,21 @@ class VisualizarReglas(tk.Frame):
                 pdf.savefig(self.figGraf2)
                 for page in self.tablaDatos:
                     pdf.savefig(page)
-            return nombreFichero.name
+            return nombreFichero
 
     def exportacionReglaIndividual(self, nombreFichero):
-        nombreFichero = nombreFichero.replace('.pdf','')
-        nombreFichero = nombreFichero + "_reglas.pdf"
-        with PdfPages(nombreFichero) as pdf:
-            for regla in self.controller.reglas:
-                regla.generarGraficos()
-                pdf.savefig(regla.nombreExportar)
-                pdf.savefig(regla.tablaContingencias)
-                pdf.savefig(regla.graficoPuntos)
-                pdf.savefig(regla.graficoBarra)
-                for page in regla.tablaDatos:
-                    pdf.savefig(page)
+        nombre = nombreFichero.name.replace('.pdf','')
+        nombre = nombre + "_reglas.pdf"
+        if nombreFichero:
+            with PdfPages(nombre) as pdf:
+                for regla in self.controller.reglas:
+                    regla.generarGraficos()
+                    pdf.savefig(regla.nombreExportar)
+                    pdf.savefig(regla.tablaContingencias)
+                    pdf.savefig(regla.graficoPuntos)
+                    pdf.savefig(regla.graficoBarra)
+                    for page in regla.tablaDatos:
+                        pdf.savefig(page)
 
 
     def ventanaNotificacion(self):

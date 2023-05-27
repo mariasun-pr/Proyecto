@@ -1,4 +1,4 @@
-from lectura_ficheros.rules_file import *
+from lectura_ficheros.lecturaFicheroReglas import *
 from lectura_ficheros.dataset import *
 from utils.regla import *
 import re

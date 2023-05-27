@@ -35,10 +35,10 @@ class lecturaDataset:
 
             # Comprobar tipo de atributo del dataset
             elif("@attribute" in lineas[i] and not compruebaDiscreto):
-                if("real" in lineas[i] and ((self.algoritmo not in ALGORITMOS_EVOLUTIVOS) or (discretizado and self.algoritmo in ALGORITMOS_EVOLUTIVOS))):
+                if(("real" in lineas[i] or "integer" in lineas[i]) and ((self.algoritmo not in ALGORITMOS_EVOLUTIVOS) or (discretizado and self.algoritmo in ALGORITMOS_EVOLUTIVOS))):
                     print("Tiene que ser el dataset discretizado")
                     return "No discretizado"
-                elif(not "real" in lineas[i] and not discretizado):
+                elif((not "real" in lineas[i] and not "integer" in lineas[i]) and not discretizado):
                     print("El dataset no tiene que estar discretizado")
                     return "Discretizado"
                 else:
@@ -70,15 +70,23 @@ class lecturaDataset:
                 self.datos.append(linea)
 
         # Inicializo el atributo que almacen las reglas que cubren al dato
-        self.reglasCubren = [None] * len(self.datos)
+        self.reglasCubrenBien = [None] * len(self.datos)
+        self.reglasCubrenMal = [None] * len(self.datos)
 
         # Si la carga se ha producido correctamente
         return "True"
 
-    def anadirRegla(self, dato, regla):
+    def anadirRegla(self, dato, regla, cubiertoBien):
         nombreRegla = re.sub(r':.*', "", regla.nombre)
-        valor = self.reglasCubren[self.datos.index(dato)]
-        if(valor != None and nombreRegla not in valor):
-            self.reglasCubren[self.datos.index(dato)] += ", " + nombreRegla
-        elif(valor == None):
-            self.reglasCubren[self.datos.index(dato)] = nombreRegla
+        if(cubiertoBien):
+            valor = self.reglasCubrenBien[self.datos.index(dato)]
+            if(valor != None and nombreRegla not in valor):
+                self.reglasCubrenBien[self.datos.index(dato)] += ", " + nombreRegla
+            elif(valor == None):
+                self.reglasCubrenBien[self.datos.index(dato)] = nombreRegla
+        else:
+            valor = self.reglasCubrenMal[self.datos.index(dato)]
+            if(valor != None and nombreRegla not in valor):
+                self.reglasCubrenMal[self.datos.index(dato)] += ", " + nombreRegla
+            elif(valor == None):
+                self.reglasCubrenMal[self.datos.index(dato)] = nombreRegla
