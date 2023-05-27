@@ -14,6 +14,7 @@ class Regla:
         self.operadores = operadores
         self.datosCubre = []
         self.colorDatosCubre = []
+        self.numDeDatosCubre = []
         self.numEtiquetas = numE
 
         self.nombreExportar = None

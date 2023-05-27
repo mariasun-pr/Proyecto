@@ -15,8 +15,9 @@ class evaluacionReglasNoDiscretizado:
             trueNegative = 0
             falsePositive = 0
             falseNegative = 0
-
+            contDato = 0
             for dato in dataset.datos:
+                contDato+=1
                 contOcurrencias = 0
                 contValoresAtributosRegla = 0
 
@@ -33,6 +34,8 @@ class evaluacionReglasNoDiscretizado:
                         dataset.anadirRegla(dato, regla, True)
                         regla.datosCubre.append(dato)
                         regla.colorDatosCubre.append("blue")
+                        regla.numDeDatosCubre.append(contDato)
+
                     else:
                         falseNegative += 1
 
@@ -42,6 +45,8 @@ class evaluacionReglasNoDiscretizado:
                         dataset.anadirRegla(dato, regla, False)
                         regla.datosCubre.append(dato)
                         regla.colorDatosCubre.append("red")
+                        regla.numDeDatosCubre.append(contDato)
+
                     else:
                         trueNegative += 1
 

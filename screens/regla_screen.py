@@ -284,7 +284,7 @@ class VisualizarInfoRegla(tk.Frame):
                      style.STYLE_TITULO_TABLA, relief=tk.GROOVE,)
         
         cont = 12
-        contadorDatos = 1
+        contadorDatos = 0
         for dato in self.regla.datosCubre:
             entradaTabla = tk.Entry(
                 infoReglaFrame,
@@ -296,9 +296,9 @@ class VisualizarInfoRegla(tk.Frame):
                 sticky=tk.NSEW,
                 columnspan=2
             )
-            texto = "Ejemplo "+ str(contadorDatos) +": "+",".join(dato)
+            texto = "Ejemplo "+ str(self.regla.numDeDatosCubre[contadorDatos]) +": "+",".join(dato)
             entradaTabla.insert(tk.END, texto)
-            color = self.regla.colorDatosCubre[contadorDatos-1]
+            color = self.regla.colorDatosCubre[contadorDatos]
             if(color == "blue"):
                 entradaTabla.configure(state=tk.DISABLED, **
                           style.STYLE_REGLA_BIEN, relief=tk.GROOVE,)
