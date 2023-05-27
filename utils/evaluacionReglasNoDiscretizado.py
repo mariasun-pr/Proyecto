@@ -8,6 +8,7 @@ class evaluacionReglasNoDiscretizado:
         intervalos = []
         self.numEtiquetas = reglas[0].numEtiquetas
         self.dividirIntervalos(intervalos)
+        numDatos = len(dataset.datos)
 
         for regla in reglas:
             truePositive = 0
@@ -29,26 +30,24 @@ class evaluacionReglasNoDiscretizado:
                 if (dato[len(regla.atributos)] == regla.clase):
                     if (contOcurrencias == contValoresAtributosRegla):
                         truePositive += 1
-                        dataset.anadirRegla(dato, regla)
+                        dataset.anadirRegla(dato, regla, True)
                         regla.datosCubre.append(dato)
+                        regla.colorDatosCubre.append("blue")
                     else:
                         falseNegative += 1
 
                 if (dato[len(regla.atributos)] != regla.clase):
                     if (contOcurrencias == contValoresAtributosRegla):
                         falsePositive += 1
+                        dataset.anadirRegla(dato, regla, False)
+                        regla.datosCubre.append(dato)
+                        regla.colorDatosCubre.append("red")
                     else:
                         trueNegative += 1
 
-            regla.tp = truePositive
-            regla.tn = trueNegative
-            regla.fp = falsePositive
-            regla.fn = falseNegative
+            regla.realizarCalculos(truePositive,trueNegative,falsePositive,falseNegative, numDatos)
 
-            regla.tpr = round(
-                (truePositive / (truePositive + falseNegative))*100, 2)
-            regla.fpr = round(
-                (falsePositive / (falsePositive + trueNegative))*100, 2)
+            
             
         for regla in reglas:
             regla.mostrar()

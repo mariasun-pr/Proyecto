@@ -142,3 +142,18 @@ class Regla:
         self.tablaContingencias = fig
         plt.close()
 
+    def realizarCalculos(self, truePositive, trueNegative, falsePositive, falseNegative, numDatos):
+        self.tp = truePositive
+        self.tn = trueNegative
+        self.fp = falsePositive
+        self.fn = falseNegative
+
+        self.tpr = round(
+            (truePositive / (truePositive + falseNegative))*100, 2)
+        self.fpr = round(
+            (falsePositive / (falsePositive + trueNegative))*100, 2)
+        self.confianza = round(
+            (truePositive / (falsePositive + truePositive))*100, 2)
+        self.WRAccN = round(
+            (((truePositive+falsePositive)/numDatos)*(self.confianza-(truePositive+falseNegative)/numDatos)), 2)
+

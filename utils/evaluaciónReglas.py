@@ -1,6 +1,7 @@
 class evaluacionReglas:
 
     def evaluarReglas(self, dataset, reglas):
+        numDatos = len(dataset.datos)
 
         for regla in reglas:
             truePositive = 0
@@ -50,20 +51,7 @@ class evaluacionReglas:
                     else:
                         trueNegative += 1
 
-            regla.tp = truePositive
-            regla.tn = trueNegative
-            regla.fp = falsePositive
-            regla.fn = falseNegative
-
-            regla.tpr = round(
-                (truePositive / (truePositive + falseNegative))*100, 2)
-            regla.fpr = round(
-                (falsePositive / (falsePositive + trueNegative))*100, 2)
-            regla.confianza = round(
-                (truePositive / (falsePositive + truePositive))*100, 2)
-            numDatos = len(dataset.datos)
-            regla.WRAccN = round(
-                (((truePositive+falsePositive)/numDatos)*(regla.confianza-(truePositive+falseNegative)/numDatos)), 2)
+            regla.realizarCalculos(truePositive,trueNegative,falsePositive,falseNegative, numDatos)
 
         for regla in reglas:
             regla.mostrar()

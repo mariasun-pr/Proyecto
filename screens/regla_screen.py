@@ -113,6 +113,7 @@ class VisualizarInfoRegla(tk.Frame):
         )
 
         self.dibujarTablaContingencias(frame_canvas)
+        self.dibujarTablaMedidas(frame_canvas)
         self.dibujarGraficoPuntos(frame_canvas)
         #self.dibujarPiramidePoblacion(frame_canvas)
         self.TablaDatosCubreRegla(frame_canvas)
@@ -246,7 +247,7 @@ class VisualizarInfoRegla(tk.Frame):
 
         # Add canvas to Tkinter window
         canvas.get_tk_widget().grid(
-            row=5,
+            row=10,
             column=0,
             columnspan=2,
             sticky=tk.NSEW,
@@ -273,7 +274,7 @@ class VisualizarInfoRegla(tk.Frame):
             justify=tk.CENTER,
         )
         tituloTabla.grid(
-            row=7,
+            row=11,
             column=0,
             sticky=tk.NSEW,
             columnspan=2
@@ -282,7 +283,7 @@ class VisualizarInfoRegla(tk.Frame):
         tituloTabla.configure(state=tk.DISABLED, **
                      style.STYLE_TITULO_TABLA, relief=tk.GROOVE,)
         
-        cont = 8
+        cont = 12
         contadorDatos = 1
         for dato in self.regla.datosCubre:
             entradaTabla = tk.Entry(
@@ -308,7 +309,126 @@ class VisualizarInfoRegla(tk.Frame):
             contadorDatos +=1
             cont+=1
 
+    def dibujarTablaMedidas(self, infoReglaFrame):
+        tk.Label(            
+            infoReglaFrame,
+            text="Tabla de medidas (%)",
+            justify=tk.CENTER,
+            **style.STYLE_TITULO_REGLAS  # Desenpaqueta STYLE,
+        ).grid(
+            row=5,
+            column=0,
+            sticky=tk.NSEW,
+            padx=20,
+            pady=5,
+            columnspan=2
+        )
 
+        confianza = tk.Entry(
+            infoReglaFrame,
+            justify=tk.CENTER,
+            width=40,
+        )
+        confianza.grid(
+            row=6,
+            column=0,
+            sticky=tk.NSEW,
+        )
+        confianza.insert(tk.END, "Conf")
+        confianza.configure(state=tk.DISABLED, **
+                     style.STYLE_TITULO_TABLA, relief=tk.GROOVE,)
+
+        confianzaValor = tk.Entry(
+            infoReglaFrame,
+            justify=tk.CENTER,
+        )
+        confianzaValor.grid(
+            row=7,
+            column=0,
+            sticky=tk.NSEW,
+        )
+        confianzaValor.insert(tk.END, str(self.regla.confianza))
+        confianzaValor.configure(state=tk.DISABLED, **
+                          style.STYLE_TEXT, relief=tk.GROOVE,)
+
+        tpr = tk.Entry(
+            infoReglaFrame,
+            justify=tk.CENTER,
+        )
+        tpr.grid(
+            row=8,
+            column=0,
+            sticky=tk.NSEW,
+        )
+        tpr.insert(tk.END, "True positive rate (TPr)")
+        tpr.configure(state=tk.DISABLED, **
+                     style.STYLE_TITULO_TABLA, relief=tk.GROOVE,)
+
+        tprValor = tk.Entry(
+            infoReglaFrame,
+            justify=tk.CENTER,
+        )
+        tprValor.grid(
+            row=9,
+            column=0,
+            sticky=tk.NSEW,
+        )
+        tprValor.insert(tk.END, str(self.regla.tpr))
+        tprValor.configure(state=tk.DISABLED, **
+                          style.STYLE_TEXT, relief=tk.GROOVE,)
+
+        Wracc = tk.Entry(
+            infoReglaFrame,
+            justify=tk.CENTER,
+            width=40,
+        )
+        Wracc.grid(
+            row=6,
+            column=1,
+            sticky=tk.NSEW,
+        )
+        Wracc.insert(tk.END, "WRAccN")
+        Wracc.configure(state=tk.DISABLED, **
+                     style.STYLE_TITULO_TABLA, relief=tk.GROOVE,)
+
+        WraccValor = tk.Entry(
+            infoReglaFrame,
+            justify=tk.CENTER,
+        )
+        WraccValor.grid(
+            row=7,
+            column=1,
+            sticky=tk.NSEW,
+        )
+        WraccValor.insert(tk.END, str(self.regla.WRAccN))
+        WraccValor.configure(state=tk.DISABLED, **
+                          style.STYLE_TEXT, relief=tk.GROOVE,)
+
+        fpr = tk.Entry(
+            infoReglaFrame,
+            justify=tk.CENTER,
+        )
+        fpr.grid(
+            row=8,
+            column=1,
+            sticky=tk.NSEW,
+        )
+        fpr.insert(tk.END, "False negative rate (FPr)")
+        fpr.configure(state=tk.DISABLED, **
+                     style.STYLE_TITULO_TABLA, relief=tk.GROOVE,)
+
+        fprValor = tk.Entry(
+            infoReglaFrame,
+            justify=tk.CENTER,
+        )
+        fprValor.grid(
+            row=9,
+            column=1,
+            sticky=tk.NSEW,
+        )
+        fprValor.insert(tk.END, str(self.regla.fpr))
+        fprValor.configure(state=tk.DISABLED, **
+                          style.STYLE_TEXT, relief=tk.GROOVE,)
 
 
     
