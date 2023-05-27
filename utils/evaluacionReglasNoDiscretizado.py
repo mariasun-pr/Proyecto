@@ -17,21 +17,24 @@ class evaluacionReglasNoDiscretizado:
             falseNegative = 0
             contDato = 0
             for dato in dataset.datos:
-                contDato+=1
+                contDato += 1
                 contOcurrencias = 0
                 contValoresAtributosRegla = 0
-
+                calculoTotal = 0
                 for i in range(len(regla.atributos)):
                     if (regla.atributos[i] != None):
                         contValoresAtributosRegla += 1
-                        etiqueta = self.funcionPertenencia(intervalos[i], dato[i])
+                        etiqueta, calculo = self.funcionPertenencia(
+                            intervalos[i], dato[i])
                         if (regla.atributos[i] == str(etiqueta)):
                             contOcurrencias += 1
+                            calculoTotal = calculo + calculoTotal
 
+                calculoTotal = calculoTotal/contValoresAtributosRegla
                 if (dato[len(regla.atributos)] == regla.clase):
                     if (contOcurrencias == contValoresAtributosRegla):
                         truePositive += 1
-                        dataset.anadirRegla(dato, regla, True)
+                        dataset.anadirRegla(dato, regla, True, round(calculoTotal, 2))
                         regla.datosCubre.append(dato)
                         regla.colorDatosCubre.append("blue")
                         regla.numDeDatosCubre.append(contDato)
@@ -42,7 +45,7 @@ class evaluacionReglasNoDiscretizado:
                 if (dato[len(regla.atributos)] != regla.clase):
                     if (contOcurrencias == contValoresAtributosRegla):
                         falsePositive += 1
-                        dataset.anadirRegla(dato, regla, False)
+                        dataset.anadirRegla(dato, regla, False, round(calculoTotal, 2))
                         regla.datosCubre.append(dato)
                         regla.colorDatosCubre.append("red")
                         regla.numDeDatosCubre.append(contDato)
@@ -50,10 +53,9 @@ class evaluacionReglasNoDiscretizado:
                     else:
                         trueNegative += 1
 
-            regla.realizarCalculos(truePositive,trueNegative,falsePositive,falseNegative, numDatos)
+            regla.realizarCalculos(
+                truePositive, trueNegative, falsePositive, falseNegative, numDatos)
 
-            
-            
         for regla in reglas:
             regla.mostrar()
 
@@ -79,25 +81,19 @@ class evaluacionReglasNoDiscretizado:
         calculo = -1.0
         valor = float(valor)
         y = float(y)
-        for i in range (self.numEtiquetas):
+        for i in range(self.numEtiquetas):
             x0 = float(intervalo[i])
             x1 = float(intervalo[i+1])
             x2 = float(intervalo[i+2])
 
-            if (valor<x1):
+            if (valor < x1):
                 calculo = ((valor-x0)*(y/(x1-x0)))
-            if (valor>x1):
+            if (valor > x1):
                 calculo = ((x2-valor)*(y/(x2-x1)))
-            
-            if(calculo > pertenencia):
+
+            if (calculo > pertenencia):
                 pertenencia = calculo
                 etiqueta = i
-                calculo = -1
+                calculo = -1.0
 
-        return etiqueta
-
-
-
-
-
-
+        return etiqueta, pertenencia

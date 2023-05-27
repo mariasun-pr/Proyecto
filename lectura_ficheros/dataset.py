@@ -76,8 +76,10 @@ class lecturaDataset:
         # Si la carga se ha producido correctamente
         return "True"
 
-    def anadirRegla(self, dato, regla, cubiertoBien):
+    def anadirRegla(self, dato, regla, cubiertoBien, disparo = -2):
         nombreRegla = re.sub(r':.*', "", regla.nombre)
+        if(disparo != -2):
+            nombreRegla += "("+str(disparo)+")"
         if(cubiertoBien):
             valor = self.reglasCubrenBien[self.datos.index(dato)]
             if(valor != None and nombreRegla not in valor):

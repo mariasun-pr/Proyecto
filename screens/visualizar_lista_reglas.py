@@ -181,7 +181,7 @@ class VisualizarReglas(tk.Frame):
             ax.scatter(regla.fpr, regla.tpr, s=110)
             nombreSeparado = regla.nombre.split(' ')
             plt.annotate(
-                "      "+nombreSeparado[0]+" "+nombreSeparado[1], (regla.fpr, regla.tpr))
+                "    "+nombreSeparado[0]+" "+nombreSeparado[1], (regla.fpr, regla.tpr))
 
         # Create canvas
         canvas = FigureCanvasTkAgg(fig, master=infoReglaFrame)
