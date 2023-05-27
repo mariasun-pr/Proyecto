@@ -7,11 +7,9 @@ class evaluacionReglas:
             trueNegative = 0
             falsePositive = 0
             falseNegative = 0
-
             for dato in dataset.datos:
                 contOcurrencias = 0
                 contValoresAtributosRegla = 0
-
                 for i in range(len(regla.atributos)):
                     if (regla.atributos[i] != None):
                         contValoresAtributosRegla += 1
@@ -37,14 +35,18 @@ class evaluacionReglas:
                 if (dato[len(regla.atributos)] == regla.clase):
                     if (contOcurrencias == contValoresAtributosRegla):
                         truePositive += 1
-                        dataset.anadirRegla(dato, regla)
+                        dataset.anadirRegla(dato, regla, True)
                         regla.datosCubre.append(dato)
+                        regla.colorDatosCubre.append("blue")
                     else:
                         falseNegative += 1
 
                 if (dato[len(regla.atributos)] != regla.clase):
                     if (contOcurrencias == contValoresAtributosRegla):
                         falsePositive += 1
+                        dataset.anadirRegla(dato, regla, False)
+                        regla.datosCubre.append(dato)
+                        regla.colorDatosCubre.append("red")
                     else:
                         trueNegative += 1
 
@@ -57,6 +59,11 @@ class evaluacionReglas:
                 (truePositive / (truePositive + falseNegative))*100, 2)
             regla.fpr = round(
                 (falsePositive / (falsePositive + trueNegative))*100, 2)
+            regla.confianza = round(
+                (truePositive / (falsePositive + truePositive))*100, 2)
+            numDatos = len(dataset.datos)
+            regla.WRAccN = round(
+                (((truePositive+falsePositive)/numDatos)*(regla.confianza-(truePositive+falseNegative)/numDatos)), 2)
 
         for regla in reglas:
             regla.mostrar()

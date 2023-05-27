@@ -37,3 +37,16 @@ STYLE_TITULO_TABLA = {
     "disabledbackground": COLOR_BACKGROUND_TITLE,
     "disabledforeground": COLOR_TEXT,
 }
+
+STYLE_REGLA_BIEN = {
+    "font": FONT_TEXT,
+    "fg": "#1F77B4",
+    "disabledforeground": "#1F77B4",
+}
+
+STYLE_REGLA_MAL = {
+    "font": FONT_TEXT,
+    "fg": "#FF7F0E",
+    "disabledforeground": "#FF7F0E",
+}
+

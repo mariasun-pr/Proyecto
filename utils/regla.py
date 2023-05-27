@@ -13,6 +13,7 @@ class Regla:
         self.nombre = nombreRegla
         self.operadores = operadores
         self.datosCubre = []
+        self.colorDatosCubre = []
         self.numEtiquetas = numE
 
         self.nombreExportar = None
@@ -28,6 +29,8 @@ class Regla:
 
         self.tpr = 0
         self.fpr = 0
+        self.WRAccN = 0
+        self.confianza = 0
 
     def mostrar(self):
         print("\n\n\n"+self.nombre)
@@ -48,7 +51,7 @@ class Regla:
             self.generarNombre()
             self.dibujarTablaContingencias()
             self.dibujarGraficoPuntos()
-            self.dibujarGraficoPiramide()
+            #self.dibujarGraficoPiramide()
             self.dibujarTablaDatos()
 
     def generarNombre(self):

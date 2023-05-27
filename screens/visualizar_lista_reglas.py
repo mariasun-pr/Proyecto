@@ -102,6 +102,8 @@ class VisualizarReglas(tk.Frame):
         frame_canvas.configure(background=style.COLOR_BACKGROUND)
         frame_canvas.grid_columnconfigure(0, weight=1)
         frame_canvas.grid_columnconfigure(1, weight=1)
+        #frame_canvas.grid_columnconfigure(2, weight=1)
+
         self.canvas.create_window((1, 1), window=frame_canvas, anchor=tk.N)
 
         # Para que funcione el scroll con la rueda del ratón en cualquier SO
@@ -171,8 +173,7 @@ class VisualizarReglas(tk.Frame):
         ax.set_xlabel('FPr')
         ax.set_ylabel('TPr')
         ax.set_title('TPr/FPr')
-        fig.set_size_inches(
-            w=(plt.get_current_fig_manager().window.winfo_screenwidth()/100)-1, h=6.5)
+        fig.set_size_inches(w=((plt.get_current_fig_manager().window.winfo_screenwidth()/2)/100)-0.35, h=6.5)
 
         XY = np.arange(0, 101, 1)
         ax.fill_between(XY, XY, facecolor='red', alpha=0.65)
@@ -190,7 +191,7 @@ class VisualizarReglas(tk.Frame):
         canvas.get_tk_widget().grid(
             row=len(self.controller.reglas),
             column=0,
-            columnspan=2,
+            #columnspan=2,
             sticky=tk.NSEW,
             pady=13,
         )
@@ -200,8 +201,9 @@ class VisualizarReglas(tk.Frame):
     def DibujarPiramidePoblacion(self, infoReglaFrame):
         fig, ax = plt.subplots()
         cont = 0
-        fig.set_size_inches(
-            w=(plt.get_current_fig_manager().window.winfo_screenwidth()/100)-1, h=6.5)
+        fig.set_size_inches(w=((plt.get_current_fig_manager().window.winfo_screenwidth()/2)/100)-0.35, h=6.5)
+
+
         for regla in self.controller.reglas:
             ax.barh(cont, regla.tpr, align='center', color='#1F77B4')
             ax.barh(cont, -regla.fpr, align='center', color='#FF7F0E')
@@ -224,9 +226,9 @@ class VisualizarReglas(tk.Frame):
 
         # Add canvas to Tkinter window
         canvas.get_tk_widget().grid(
-            row=len(self.controller.reglas)+1,
-            column=0,
-            columnspan=2,
+            row=len(self.controller.reglas),
+            column=1,
+            #columnspan=2,
             sticky=tk.NSEW,
             pady=13,
         )
@@ -234,27 +236,39 @@ class VisualizarReglas(tk.Frame):
         self.figGraf2 = fig
 
     def TablaDatosCubreRegla(self, infoReglaFrame):
-        tituloTabla = tk.Entry(
-            infoReglaFrame,
-            justify=tk.CENTER,
-        )
-        tituloTabla.grid(
-            row=len(self.controller.reglas)+2,
+        tablaFrame = tk.Frame(infoReglaFrame)
+        tablaFrame.configure(background=style.COLOR_BACKGROUND,)
+        tablaFrame.grid(
+            row=len(self.controller.reglas)+1,
             column=0,
             sticky=tk.NSEW,
             columnspan=2
+        )
+        tablaFrame.grid_columnconfigure(0, weight=1)
+        tablaFrame.grid_columnconfigure(1, weight=1)
+        tablaFrame.grid_columnconfigure(2, weight=1)
+
+        tituloTabla = tk.Entry(
+            tablaFrame,
+            justify=tk.CENTER,
+        )
+        tituloTabla.grid(
+            row=0,
+            column=0,
+            sticky=tk.NSEW,
+            columnspan=3
         )
         tituloTabla.insert(tk.END, "Reglas que cubren a cada dato")
         tituloTabla.configure(state=tk.DISABLED, **
                               style.STYLE_TITULO_TABLA, relief=tk.GROOVE,)
 
-        cont = len(self.controller.reglas)+3
+        cont = 1
         contNumDatos = 0
         tabla = []
         for dato in self.controller.dataset.datos:
             fila_tabla = []
             entradaTabla = tk.Entry(
-                infoReglaFrame,
+                tablaFrame,
                 justify=tk.CENTER,
             )
             entradaTabla.grid(
@@ -262,33 +276,51 @@ class VisualizarReglas(tk.Frame):
                 column=0,
                 sticky=tk.NSEW,
             )
-            entradaTabla.insert(tk.END, dato)
+            texto = "Ejemplo "+ str(contNumDatos+1) +": "+",".join(dato)
+            entradaTabla.insert(tk.END, texto)
             entradaTabla.configure(state=tk.DISABLED, **
                                    style.STYLE_TEXT, relief=tk.GROOVE,)
             fila_tabla.append(entradaTabla.get())
 
-            entradaReglas = tk.Entry(
-                infoReglaFrame,
+            entradaReglasBien = tk.Entry(
+                tablaFrame,
                 justify=tk.CENTER,
             )
-            entradaReglas.grid(
+            entradaReglasBien.grid(
                 row=cont,
                 column=1,
                 sticky=tk.NSEW,
             )
-            texto = self.controller.dataset.reglasCubren[self.controller.dataset.datos.index(
+            texto = self.controller.dataset.reglasCubrenBien[self.controller.dataset.datos.index(
                 dato)]
             if (texto == None):
                 texto = ''
-            entradaReglas.insert(tk.END, texto)
-            entradaReglas.configure(state=tk.DISABLED, **
-                                    style.STYLE_TEXT, relief=tk.GROOVE,)
-            fila_tabla.append(entradaReglas.get())
+            entradaReglasBien.insert(tk.END, texto)
+            entradaReglasBien.configure(state=tk.DISABLED, **
+                                    style.STYLE_REGLA_BIEN, relief=tk.GROOVE,)
+            fila_tabla.append(entradaReglasBien.get())
+
+            entradaReglasMal = tk.Entry(
+                tablaFrame,
+                justify=tk.CENTER,
+            )
+            entradaReglasMal.grid(
+                row=cont,
+                column=2,
+                sticky=tk.NSEW,
+            )
+            texto = self.controller.dataset.reglasCubrenMal[self.controller.dataset.datos.index(
+                dato)]
+            if (texto == None):
+                texto = ''
+            entradaReglasMal.insert(tk.END, texto)
+            entradaReglasMal.configure(state=tk.DISABLED, **
+                                    style.STYLE_REGLA_MAL, relief=tk.GROOVE,)
+            fila_tabla.append(entradaReglasMal.get())
 
             cont += 1
             contNumDatos += 1
             tabla.append(fila_tabla)
-
             # 50 el número de entradas de la tabla en una página.
             if (contNumDatos % 50 == 0 or contNumDatos == len(self.controller.dataset.datos)):
                 # Guardar la tabla en una imagen

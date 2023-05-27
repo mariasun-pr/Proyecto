@@ -114,7 +114,7 @@ class VisualizarInfoRegla(tk.Frame):
 
         self.dibujarTablaContingencias(frame_canvas)
         self.dibujarGraficoPuntos(frame_canvas)
-        self.dibujarPiramidePoblacion(frame_canvas)
+        #self.dibujarPiramidePoblacion(frame_canvas)
         self.TablaDatosCubreRegla(frame_canvas)
 
 
@@ -283,6 +283,7 @@ class VisualizarInfoRegla(tk.Frame):
                      style.STYLE_TITULO_TABLA, relief=tk.GROOVE,)
         
         cont = 8
+        contadorDatos = 1
         for dato in self.regla.datosCubre:
             entradaTabla = tk.Entry(
                 infoReglaFrame,
@@ -294,11 +295,21 @@ class VisualizarInfoRegla(tk.Frame):
                 sticky=tk.NSEW,
                 columnspan=2
             )
-            entradaTabla.insert(tk.END, dato)
-            entradaTabla.configure(state=tk.DISABLED, **
-                          style.STYLE_TEXT, relief=tk.GROOVE,)
-            
+            texto = "Ejemplo "+ str(contadorDatos) +": "+",".join(dato)
+            entradaTabla.insert(tk.END, texto)
+            color = self.regla.colorDatosCubre[contadorDatos-1]
+            if(color == "blue"):
+                entradaTabla.configure(state=tk.DISABLED, **
+                          style.STYLE_REGLA_BIEN, relief=tk.GROOVE,)
+            else:
+                entradaTabla.configure(state=tk.DISABLED, **
+                    style.STYLE_REGLA_MAL, relief=tk.GROOVE,)
+
+            contadorDatos +=1
             cont+=1
+
+
+
 
     
 
