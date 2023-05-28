@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 import numpy as np
 from tkinter import filedialog
+from idlelib.tooltip import Hovertip
 
 
 class VisualizarReglas(tk.Frame):
@@ -291,11 +292,17 @@ class VisualizarReglas(tk.Frame):
                 column=0,
                 sticky=tk.NSEW,
             )
-            texto = "Ejemplo "+ str(contNumDatos+1) +": "+",".join(dato)
+            texto = "Ejemplo "+ str(contNumDatos+1) +": "+self.controller.dataset.datosFormateados[contNumDatos]
             entradaTabla.insert(tk.END, texto)
             entradaTabla.configure(state=tk.DISABLED, **
                                    style.STYLE_TEXT, relief=tk.GROOVE,)
             fila_tabla.append(entradaTabla.get())
+
+            infoDelDato = "Ejemplo: "+ str(contNumDatos+1) +"\n"
+            for i in range(len(self.controller.dataset.atributos)):
+                infoDelDato = infoDelDato + self.controller.dataset.atributos[i]+": "+dato[i]+"\n"
+            infoDelDato += "Class: " + dato[len(dato)-1]
+            CustomHovertip(entradaTabla, text=infoDelDato, hover_delay=75)
 
             entradaReglasBien = tk.Entry(
                 tablaFrame,
@@ -432,3 +439,16 @@ class VisualizarReglas(tk.Frame):
         
         # Mostrar la ventana de notificación
         ventana.deiconify()
+
+class CustomHovertip(Hovertip):
+    def showcontents(self):
+        label = tk.Label(
+            self.tipwindow, text=f'{self.text}', justify=tk.LEFT,
+            fg="black", relief=tk.SOLID, borderwidth=1, bg="#FDFD96",
+            font=("Arial", 12)
+            )
+        label.pack()
+        x, y = self.get_position()
+        root_x = self.anchor_widget.winfo_rootx() + 20*x
+        root_y = self.anchor_widget.winfo_rooty() - 3*y
+        self.tipwindow.wm_geometry("+%d+%d" % (root_x, root_y))

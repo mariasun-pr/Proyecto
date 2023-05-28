@@ -8,6 +8,7 @@ class lecturaDataset:
         self.algoritmo = algoritmo
         self.intervalos = []
         self.cabecera = ""
+        self.datosFormateados = []
 
     def lecturaFichero(self, discretizado):
         fichero = open(self.nombreFichero)
@@ -78,6 +79,7 @@ class lecturaDataset:
         # Inicializo el atributo que almacen las reglas que cubren al dato
         self.reglasCubrenBien = [None] * len(self.datos)
         self.reglasCubrenMal = [None] * len(self.datos)
+        self.formatearDatosParaMostrar()
 
         # Si la carga se ha producido correctamente
         return "True"
@@ -103,4 +105,13 @@ class lecturaDataset:
             elif (valor == None):
                 self.reglasCubrenMal[self.datos.index(dato)] = nombreRegla
 
-        
+    def formatearDatosParaMostrar(self):
+        for dato in self.datos:
+            texto = dato[0]+", "+dato[1]
+            if (2 < len(self.datos)):
+                texto = texto + ", " + dato[2]
+            if (3 < len(self.datos)):
+                texto = texto + ", " + "..."
+            texto = texto + ", " + dato[len(dato)-1]
+
+            self.datosFormateados.append(texto)
