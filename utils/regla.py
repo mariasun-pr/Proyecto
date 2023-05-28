@@ -153,8 +153,11 @@ class Regla:
             (truePositive / (truePositive + falseNegative))*100, 2)
         self.fpr = round(
             (falsePositive / (falsePositive + trueNegative))*100, 2)
-        self.confianza = round(
-            (truePositive / (falsePositive + truePositive))*100, 2)
+        if(falsePositive + truePositive == 0):
+            self.confianza = 0
+        else:
+            self.confianza = round(
+                (truePositive / (falsePositive + truePositive))*100, 2)
         self.WRAccN = round(
             (((truePositive+falsePositive)/numDatos)*(self.confianza-(truePositive+falseNegative)/numDatos)), 2)
 

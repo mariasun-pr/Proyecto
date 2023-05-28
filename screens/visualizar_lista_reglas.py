@@ -69,12 +69,14 @@ class VisualizarReglas(tk.Frame):
             row=0,
             column=1,
             pady=11,
-            sticky=tk.W,
+            sticky=tk.NSEW,
         )
 
         inicioFrame.grid_columnconfigure(0, weight=1)
         inicioFrame.grid_columnconfigure(1, weight=1)
         inicioFrame.grid_columnconfigure(2, weight=1)
+        inicioFrame.grid_columnconfigure(3, weight=1)
+
 
         reglasFrame = tk.Frame(self)
         reglasFrame.configure(background=style.COLOR_BACKGROUND,)
@@ -102,7 +104,6 @@ class VisualizarReglas(tk.Frame):
         frame_canvas.configure(background=style.COLOR_BACKGROUND)
         frame_canvas.grid_columnconfigure(0, weight=1)
         frame_canvas.grid_columnconfigure(1, weight=1)
-        #frame_canvas.grid_columnconfigure(2, weight=1)
 
         self.canvas.create_window((1, 1), window=frame_canvas, anchor=tk.N)
 
@@ -141,8 +142,22 @@ class VisualizarReglas(tk.Frame):
             font=("Arial", 18)
         ).grid(
             row=0,
-            column=2,
+            column=3,
             padx=15,
+            pady=11,
+            sticky=tk.E,
+        )
+
+        tk.Button(
+            inicioFrame,
+            text="Info del dataset",
+            command=lambda: self.ventanaCabecera(),
+            **style.STYLE_BUTTON,
+            font=("Arial", 18)
+        ).grid(
+            row=0,
+            column=2,
+            padx=10,
             pady=11,
             sticky=tk.E,
         )
@@ -384,6 +399,36 @@ class VisualizarReglas(tk.Frame):
         
         # Configurar la ventana de notificación para que desaparezca en 3 segundos
         ventana.after(3000, ventana.destroy)
+        
+        # Mostrar la ventana de notificación
+        ventana.deiconify()
+
+    def ventanaCabecera(self):
+        ventana = tk.Toplevel()
+        ventana.title("Cabecera del dataset")  # Establecer el título de la ventana
+        
+        # Crear labels con la información de la cabecera
+        tk.Label(ventana, text="Cabecera del dataset", font=("Arial", 18, "bold")).pack(pady=10)
+        tk.Label(ventana, text=self.controller.dataset.cabecera, font=("Arial", 14)).pack()
+
+        # Actualizar las dimensiones de la ventana
+        ventana.update_idletasks()
+
+        # Obtener el ancho y alto de la ventana
+        window_width = ventana.winfo_width()
+        window_height = ventana.winfo_height()
+
+        # Obtener el ancho y alto de la pantalla
+        screen_width = ventana.winfo_screenwidth()
+        screen_height = ventana.winfo_screenheight()
+
+        # Calcular la posición x, y para que la ventana esté centrada
+        x = (screen_width // 2) - (window_width // 2)
+        y = (screen_height // 2) - (window_height // 2)
+        
+        # Establecer la posición del Toplevel en el centro
+        ventana.geometry("+{}+{}".format(x, y))
+
         
         # Mostrar la ventana de notificación
         ventana.deiconify()
