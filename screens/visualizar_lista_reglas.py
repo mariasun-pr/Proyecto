@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 import numpy as np
 from tkinter import filedialog
-from idlelib.tooltip import Hovertip
+from utils.constantes import CustomHovertip
 
 
 class VisualizarReglas(tk.Frame):
@@ -78,7 +78,6 @@ class VisualizarReglas(tk.Frame):
         inicioFrame.grid_columnconfigure(2, weight=1)
         inicioFrame.grid_columnconfigure(3, weight=1)
 
-
         reglasFrame = tk.Frame(self)
         reglasFrame.configure(background=style.COLOR_BACKGROUND,)
         reglasFrame.pack(
@@ -100,7 +99,7 @@ class VisualizarReglas(tk.Frame):
                               background=style.COLOR_BACKGROUND,
                               borderwidth=0,
                               highlightthickness=0)
-        
+
         frame_canvas = tk.Frame(self.canvas)
         frame_canvas.configure(background=style.COLOR_BACKGROUND)
         frame_canvas.grid_columnconfigure(0, weight=1)
@@ -138,7 +137,7 @@ class VisualizarReglas(tk.Frame):
         tk.Button(
             inicioFrame,
             text="Exportar",
-            command=lambda: self.exportar(),
+            command=lambda: self.exportar2(),
             **style.STYLE_BUTTON,
             font=("Arial", 18)
         ).grid(
@@ -189,7 +188,8 @@ class VisualizarReglas(tk.Frame):
         ax.set_xlabel('FPr')
         ax.set_ylabel('TPr')
         ax.set_title('TPr/FPr')
-        fig.set_size_inches(w=((plt.get_current_fig_manager().window.winfo_screenwidth()/2)/100)-0.35, h=6.5)
+        fig.set_size_inches(
+            w=((plt.get_current_fig_manager().window.winfo_screenwidth()/2)/100)-0.35, h=6.5)
 
         XY = np.arange(0, 101, 1)
         ax.fill_between(XY, XY, facecolor='red', alpha=0.65)
@@ -207,7 +207,7 @@ class VisualizarReglas(tk.Frame):
         canvas.get_tk_widget().grid(
             row=len(self.controller.reglas),
             column=0,
-            #columnspan=2,
+            # columnspan=2,
             sticky=tk.NSEW,
             pady=13,
         )
@@ -217,8 +217,8 @@ class VisualizarReglas(tk.Frame):
     def DibujarPiramidePoblacion(self, infoReglaFrame):
         fig, ax = plt.subplots()
         cont = 0
-        fig.set_size_inches(w=((plt.get_current_fig_manager().window.winfo_screenwidth()/2)/100)-0.35, h=6.5)
-
+        fig.set_size_inches(
+            w=((plt.get_current_fig_manager().window.winfo_screenwidth()/2)/100)-0.35, h=6.5)
 
         for regla in self.controller.reglas:
             ax.barh(cont, regla.tpr, align='center', color='#1F77B4')
@@ -244,7 +244,7 @@ class VisualizarReglas(tk.Frame):
         canvas.get_tk_widget().grid(
             row=len(self.controller.reglas),
             column=1,
-            #columnspan=2,
+            # columnspan=2,
             sticky=tk.NSEW,
             pady=13,
         )
@@ -292,15 +292,18 @@ class VisualizarReglas(tk.Frame):
                 column=0,
                 sticky=tk.NSEW,
             )
-            texto = "Ejemplo "+ str(contNumDatos+1) +": "+self.controller.dataset.datosFormateados[contNumDatos]
+            texto = "Ejemplo " + \
+                str(contNumDatos+1) + ": " + \
+                    self.controller.dataset.datosFormateados[contNumDatos]
             entradaTabla.insert(tk.END, texto)
             entradaTabla.configure(state=tk.DISABLED, **
                                    style.STYLE_TEXT, relief=tk.GROOVE,)
             fila_tabla.append(entradaTabla.get())
 
-            infoDelDato = "Ejemplo: "+ str(contNumDatos+1) +"\n"
+            infoDelDato = "Ejemplo: " + str(contNumDatos+1) + "\n"
             for i in range(len(self.controller.dataset.atributos)):
-                infoDelDato = infoDelDato + self.controller.dataset.atributos[i]+": "+dato[i]+"\n"
+                infoDelDato = infoDelDato + \
+                    self.controller.dataset.atributos[i]+": "+dato[i]+"\n"
             infoDelDato += "Class: " + dato[len(dato)-1]
             CustomHovertip(entradaTabla, text=infoDelDato, hover_delay=75)
 
@@ -359,8 +362,9 @@ class VisualizarReglas(tk.Frame):
         self.ventanaNotificacion()
 
     def exportacionGeneral(self):
-        #nombreFichero = "informacion_general_"+self.controller.nombreAlgoritmo+".pdf"
-        nombreFichero = filedialog.asksaveasfile(defaultextension=".pdf", filetypes=[("PDF Files", ".pdf"),("All files", "*.*")],initialfile="informacion_general_"+self.controller.nombreAlgoritmo+".pdf")
+        # nombreFichero = "informacion_general_"+self.controller.nombreAlgoritmo+".pdf"
+        nombreFichero = filedialog.asksaveasfile(defaultextension=".pdf", filetypes=[("PDF Files", ".pdf"), (
+            "All files", "*.*")], initialfile="informacion_general_"+self.controller.nombreAlgoritmo+".pdf")
         if nombreFichero:
             with PdfPages(nombreFichero.name) as pdf:
                 pdf.savefig(self.figGraf1)
@@ -370,7 +374,7 @@ class VisualizarReglas(tk.Frame):
             return nombreFichero
 
     def exportacionReglaIndividual(self, nombreFichero):
-        nombre = nombreFichero.name.replace('.pdf','')
+        nombre = nombreFichero.name.replace('.pdf', '')
         nombre = nombre + "_reglas.pdf"
         if nombreFichero:
             with PdfPages(nombre) as pdf:
@@ -383,7 +387,6 @@ class VisualizarReglas(tk.Frame):
                     for page in regla.tablaDatos:
                         pdf.savefig(page)
 
-
     def ventanaNotificacion(self):
         ventana = tk.Toplevel()
         ventana.title("Notificación")  # Establecer el título de la ventana
@@ -393,30 +396,34 @@ class VisualizarReglas(tk.Frame):
         # Obtener la resolución de la pantalla
         screen_width = ventana.winfo_screenwidth()
         screen_height = ventana.winfo_screenheight()
-        
+
         # Calcular la posición del Toplevel en el centro
         x = int((screen_width - ventana.winfo_reqwidth()) / 2)
         y = int((screen_height - ventana.winfo_reqheight()) / 2)
-        
+
         # Establecer la posición del Toplevel en el centro
         ventana.geometry("+{}+{}".format(x, y))
-        
+
         # Crear un label con el mensaje de notificación
-        tk.Label(ventana, text="Ha finalizado la exportación", font=("Arial", 12)).pack(pady=10)
-        
+        tk.Label(ventana, text="Ha finalizado la exportación",
+                 font=("Arial", 12)).pack(pady=10)
+
         # Configurar la ventana de notificación para que desaparezca en 3 segundos
         ventana.after(3000, ventana.destroy)
-        
+
         # Mostrar la ventana de notificación
         ventana.deiconify()
 
     def ventanaCabecera(self):
         ventana = tk.Toplevel()
-        ventana.title("Cabecera del dataset")  # Establecer el título de la ventana
-        
+        # Establecer el título de la ventana
+        ventana.title("Cabecera del dataset")
+
         # Crear labels con la información de la cabecera
-        tk.Label(ventana, text="Cabecera del dataset", font=("Arial", 18, "bold")).pack(pady=10)
-        tk.Label(ventana, text=self.controller.dataset.cabecera, font=("Arial", 14)).pack()
+        tk.Label(ventana, text="Cabecera del dataset",
+                 font=("Arial", 18, "bold")).pack(pady=10)
+        tk.Label(ventana, text=self.controller.dataset.cabecera,
+                 font=("Arial", 14)).pack()
 
         # Actualizar las dimensiones de la ventana
         ventana.update_idletasks()
@@ -432,23 +439,142 @@ class VisualizarReglas(tk.Frame):
         # Calcular la posición x, y para que la ventana esté centrada
         x = (screen_width // 2) - (window_width // 2)
         y = (screen_height // 2) - (window_height // 2)
-        
+
         # Establecer la posición del Toplevel en el centro
         ventana.geometry("+{}+{}".format(x, y))
 
-        
         # Mostrar la ventana de notificación
         ventana.deiconify()
 
-class CustomHovertip(Hovertip):
-    def showcontents(self):
-        label = tk.Label(
-            self.tipwindow, text=f'{self.text}', justify=tk.LEFT,
-            fg="black", relief=tk.SOLID, borderwidth=1, bg="#FDFD96",
-            font=("Arial", 12)
-            )
-        label.pack()
-        x, y = self.get_position()
-        root_x = self.anchor_widget.winfo_rootx() + 20*x
-        root_y = self.anchor_widget.winfo_rooty() - 3*y
-        self.tipwindow.wm_geometry("+%d+%d" % (root_x, root_y))
+    def exportar2(self):
+        self.figGraf1.savefig('graficaPuntos.svg', format='svg')
+        self.figGraf2.savefig('graficaPiramide.svg', format='svg')
+        self.exportarToLatexGeneral()
+        self.exportarReglas()
+        self.ventanaNotificacion()
+
+    def exportarToLatexGeneral(self):
+        # Crear el código LaTeX inicial para el documento
+        latex_code = "\\documentclass{article}\n"
+        latex_code +="\\usepackage{graphicx}\n"
+        latex_code +="\\usepackage{longtable}\n"
+        latex_code +="\\usepackage{tabularx}\n"
+        latex_code +="\\usepackage{svg}\n"
+        latex_code +="\\usepackage{geometry}\n"
+        latex_code +="\\geometry{left=2cm}\n"
+        latex_code += "\\begin{document}\n"
+        
+        latex_code += "\\section*{Cabecera del dataset}\n"
+
+        # Agregar el texto encima de la tabla
+        latex_code += self.controller.dataset.cabecera.replace("\n", " \\\\\n")
+
+        # Agregar los gráficos encima de la tabla
+        latex_code += "\\section*{Graficas}\n"
+        latex_code += "\\begin{figure}[htbp]\n"
+        latex_code += "\\centering\n"
+        latex_code += "\\includesvg[width=1.2\linewidth]{graficaPuntos.svg}\n"
+        latex_code += "\\end{figure}\n\n"
+        latex_code += "\\begin{figure}[htbp]\n"
+        latex_code += "\\includesvg[width=1.2\linewidth]{graficaPiramide.svg}\n"
+        latex_code += "\\end{figure}\n\n"
+
+        latex_code += "\\newpage\n"
+        latex_code += "\\section*{Tabla de las reglas que cubren a los datos}\n"
+        # Agregar la tabla
+        latex_code += "\\begin{longtable}{|c|c|c|c|c|c|c|c|}\n"
+        latex_code += "\\hline\n"
+
+        # Recorrer las filas de la tabla
+        for i in range(-1, len(self.controller.dataset.datos)):
+            # Recorrer las columnas de cada fila
+            if (i == -1):
+                latex_code += "Ej & " + self.controller.dataset.atributos[0] + " & " + self.controller.dataset.atributos[1] + " & ... & Clase & Cubren BIEN & Cubren MAL"
+            else:
+                for col in range(0, 4):
+                    if(col == 0):
+                        value = str(i+1) + " & "
+                    elif(col == 1):
+                        texto = self.controller.dataset.datosFormateados[i].split(", ")
+                        value+= texto[0]+" & "+texto[1]+" & "+texto[3]+" & " +texto[4]+" & "
+                    elif(col == 2):
+                        texto = " & "
+                        if(self.controller.dataset.reglasCubrenBien[i] != None):
+                            texto = self.controller.dataset.reglasCubrenBien[i] + " & "
+                        value += texto
+                    elif(col == 3):
+                        texto = ""
+                        if(self.controller.dataset.reglasCubrenMal[i] != None):
+                            texto = self.controller.dataset.reglasCubrenMal[i]
+                        value += texto
+                    # Agregar el valor al código LaTeX
+                latex_code += value
+            
+            # Agregar el fin de la fila
+            latex_code += " \\\\ \\hline\n"
+        
+        # Agregar el fin de la tabla
+        latex_code += "\\end{longtable}\n"
+        
+        # Cerrar el documento LaTeX
+        latex_code += "\\end{document}"
+        
+        # Guardar el código LaTeX en un archivo
+        with open("infoGeneral.tex", "w") as file:
+            file.write(latex_code)
+
+    def exportarReglas(self):
+        latex_code = "\\documentclass{article}\n"
+        latex_code +="\\usepackage{graphicx}\n"
+        latex_code +="\\usepackage{longtable}\n"
+        latex_code +="\\usepackage{tabularx}\n"
+        latex_code +="\\usepackage{geometry}\n"
+        latex_code +="\\geometry{left=2cm}\n"
+        latex_code += "\\begin{document}\n"
+
+        for regla in self.controller.reglas:
+            latex_code += "\\section*{" + regla.nombre + "}\n"
+            latex_code += "\\subsection*{Tabla de contingencias}\n"
+            latex_code += "\\begin{longtable}{|c|c|}\n"
+            latex_code += "\\hline\n"
+            latex_code += "True positive (tp) & False positive(fp)" 
+            latex_code += " \\\\ \\hline\n"
+            latex_code += str(regla.tp) + " & " + str(regla.fp)
+            latex_code += " \\\\ \\hline\n" 
+            latex_code += "True negative (tn) & False negative(fn)" 
+            latex_code += " \\\\ \\hline\n"
+            latex_code += str(regla.tn) + " & " + str(regla.fn)
+            latex_code += " \\\\ \\hline\n" 
+            latex_code += "\\end{longtable}\n"
+
+            latex_code += "\\subsection*{Tabla de medidas (\%)}\n"
+            latex_code += "\\begin{longtable}{|c|c|}\n"
+            latex_code += "\\hline\n"
+            latex_code += "Conf & WRAccN" 
+            latex_code += " \\\\ \\hline\n"
+            latex_code += str(regla.confianza) + " & " + str(regla.WRAccN)
+            latex_code += " \\\\ \\hline\n" 
+            latex_code += "True positive rate (TPr) & False positive(FPr)" 
+            latex_code += " \\\\ \\hline\n"
+            latex_code += str(regla.tpr) + " & " + str(regla.fpr)
+            latex_code += " \\\\ \\hline\n" 
+            latex_code += "\\end{longtable}\n"
+
+            latex_code += "\\subsection*{Tabla de los datos que cubre}\n"
+            latex_code += "\\begin{longtable}{|c|}\n"
+            latex_code += "\\hline\n"
+            contadorDatos = 0
+            for dato in regla.datosCubre:
+                latex_code +="Ejemplo "+ str(regla.numDeDatosCubre[contadorDatos]) +": "+",".join(dato)
+                latex_code += "\\hline\n"
+                contadorDatos+=1
+            latex_code += "\\end{longtable}\n"
+            latex_code += "\\newpage\n"
+                # Cerrar el documento LaTeX
+        latex_code += "\\end{document}"
+        
+        # Guardar el código LaTeX en un archivo
+        with open("infoReglas.tex", "w") as file:
+            file.write(latex_code)
+            
+

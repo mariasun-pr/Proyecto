@@ -17,3 +17,5 @@ if __name__ == "__main__":
     
     app = Manager()
     app.mainloop()
+
+    #!GENERAR ZIP Y QUE SE GUARDE DONDE QUIERA

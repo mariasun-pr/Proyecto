@@ -110,7 +110,7 @@ class lecturaDataset:
             texto = dato[0]+", "+dato[1]
             if (2 < len(self.datos)):
                 texto = texto + ", " + dato[2]
-            if (3 < len(self.datos)):
+            if (3 < len(self.datos) - 1):
                 texto = texto + ", " + "..."
             texto = texto + ", " + dato[len(dato)-1]
 

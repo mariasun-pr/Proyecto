@@ -1,5 +1,3 @@
-import tkinter as tk
-from utils import style
 from screens.visualizar_lista_reglas import *
 import matplotlib.pyplot as plt
 import numpy as np
@@ -49,11 +47,11 @@ class Regla:
 
     def generarGraficos(self):
         if(self.graficoBarra == None):
-            self.generarNombre()
-            self.dibujarTablaContingencias()
+            #self.generarNombre()
+            #self.dibujarTablaContingencias()
             self.dibujarGraficoPuntos()
             #self.dibujarGraficoPiramide()
-            self.dibujarTablaDatos()
+            #self.dibujarTablaDatos()
 
     def generarNombre(self):
         # Crear un objeto de figura de matplotlib

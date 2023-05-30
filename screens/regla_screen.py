@@ -3,8 +3,7 @@ from utils import style
 from screens.visualizar_lista_reglas import *
 import sys
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import matplotlib.pyplot as plt
-import numpy as np
+from utils.constantes import CustomHovertip
 
 
 class VisualizarInfoRegla(tk.Frame):
@@ -305,7 +304,13 @@ class VisualizarInfoRegla(tk.Frame):
             else:
                 entradaTabla.configure(state=tk.DISABLED, **
                     style.STYLE_REGLA_MAL, relief=tk.GROOVE,)
-
+                
+            infoDelDato = "Ejemplo: " + str(contadorDatos+1) + "\n"
+            for i in range(len(self.controller.dataset.atributos)):
+                infoDelDato = infoDelDato + \
+                    self.controller.dataset.atributos[i]+": "+dato[i]+"\n"
+            infoDelDato += "Class: " + dato[len(dato)-1]
+            CustomHovertip(entradaTabla, text=infoDelDato, hover_delay=75)
             contadorDatos +=1
             cont+=1
 
