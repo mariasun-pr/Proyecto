@@ -305,7 +305,7 @@ class VisualizarInfoRegla(tk.Frame):
                 entradaTabla.configure(state=tk.DISABLED, **
                     style.STYLE_REGLA_MAL, relief=tk.GROOVE,)
                 
-            infoDelDato = "Ejemplo: " + str(contadorDatos+1) + "\n"
+            infoDelDato = "Ejemplo: " + str(self.regla.numDeDatosCubre[contadorDatos]) + "\n"
             for i in range(len(self.controller.dataset.atributos)):
                 infoDelDato = infoDelDato + \
                     self.controller.dataset.atributos[i]+": "+dato[i]+"\n"
