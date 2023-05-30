@@ -9,6 +9,7 @@ from matplotlib.backends.backend_pdf import PdfPages
 import numpy as np
 from tkinter import filedialog
 from utils.constantes import CustomHovertip
+import zipfile
 
 
 class VisualizarReglas(tk.Frame):
@@ -447,11 +448,24 @@ class VisualizarReglas(tk.Frame):
         ventana.deiconify()
 
     def exportar2(self):
-        self.figGraf1.savefig('graficaPuntos.svg', format='svg')
-        self.figGraf2.savefig('graficaPiramide.svg', format='svg')
-        self.exportarToLatexGeneral()
-        self.exportarReglas()
-        self.ventanaNotificacion()
+        nombreFichero = filedialog.asksaveasfile(defaultextension=".zip", filetypes=[("ZIP Files", ".zip"), (
+            "All files", "*.*")], initialfile="informacion_general_"+self.controller.nombreAlgoritmo+".zip")
+        if nombreFichero:
+            self.figGraf1.savefig('graficaPuntos.svg', format='svg')
+            self.figGraf2.savefig('graficaPiramide.svg', format='svg')
+            self.exportarToLatexGeneral()
+            self.exportarReglas()
+
+            with zipfile.ZipFile(nombreFichero.name, 'w') as zipf:
+                # Agregar los archivos SVG al ZIP
+                zipf.write('graficaPuntos.svg')
+                zipf.write('graficaPiramide.svg')
+
+                zipf.write('infoGeneral.tex')
+                zipf.write('infoReglas.tex')
+                zipf.close()
+
+            self.ventanaNotificacion()
 
     def exportarToLatexGeneral(self):
         # Crear el código LaTeX inicial para el documento
@@ -491,6 +505,7 @@ class VisualizarReglas(tk.Frame):
             if (i == -1):
                 latex_code += "Ej & " + self.controller.dataset.atributos[0] + " & " + self.controller.dataset.atributos[1] + " & ... & Clase & Cubren BIEN & Cubren MAL"
             else:
+                dato = self.controller.dataset.datos[i]
                 for col in range(0, 4):
                     if(col == 0):
                         value = str(i+1) + " & "
@@ -499,13 +514,13 @@ class VisualizarReglas(tk.Frame):
                         value+= texto[0]+" & "+texto[1]+" & "+texto[3]+" & " +texto[4]+" & "
                     elif(col == 2):
                         texto = " & "
-                        if(self.controller.dataset.reglasCubrenBien[i] != None):
-                            texto = self.controller.dataset.reglasCubrenBien[i] + " & "
+                        if(self.controller.dataset.reglasCubrenBien[self.controller.dataset.datos.index(dato)] != None):
+                            texto = self.controller.dataset.reglasCubrenBien[self.controller.dataset.datos.index(dato)] + " & "
                         value += texto
                     elif(col == 3):
                         texto = ""
-                        if(self.controller.dataset.reglasCubrenMal[i] != None):
-                            texto = self.controller.dataset.reglasCubrenMal[i]
+                        if(self.controller.dataset.reglasCubrenMal[self.controller.dataset.datos.index(dato)] != None):
+                            texto = self.controller.dataset.reglasCubrenMal[self.controller.dataset.datos.index(dato)]
                         value += texto
                     # Agregar el valor al código LaTeX
                 latex_code += value
