@@ -29,92 +29,13 @@ class VisualizarInfoRegla(tk.Frame):
     def init_widgets(self):
         self.regla = self.controller.reglaSeleccionada
         self.regla.generarGraficos()
-        inicioFrame = tk.Frame(self)
-        inicioFrame.configure(background=style.COLOR_BACKGROUND,)
-        inicioFrame.pack(
-            side=tk.TOP,
-            fill=tk.X,
-            padx=20,
-            pady=11,
-        )
+        self.crearCabecera()
+        frame_canvas = self.frameDatos()
 
-        tk.Button(
-            inicioFrame,
-            text=" ← Atrás",
-            command=lambda: self.controller.get_frame("VisualizarReglas"),
-            **style.STYLE_BUTTON,
-            font=("Arial", 13)
-        ).pack(
-            side=tk.LEFT,
-            padx=20,
-            pady=11,
-        )
-
-        tk.Label(
-            inicioFrame,
-            text=self.regla.nombre,
-            justify=tk.CENTER,
-            wraplength=2000,
-            **style.STYLE_TITULO_REGLAS  # Desenpaqueta STYLE,
-        ).pack(
-            fill=tk.X,
-            padx=20,
-            pady=11,
-            side=tk.LEFT,
-        )
-
-        infoReglaFrame = tk.Frame(self)
-        infoReglaFrame.configure(background=style.COLOR_BACKGROUND,)
-        infoReglaFrame.pack(
-            side=tk.TOP,
-            fill=tk.BOTH,
-            padx=20,
-            expand=1,
-        )
-        infoReglaFrame.grid_columnconfigure(0, weight=1)
-        infoReglaFrame.grid_rowconfigure(0, weight=1)
-
-        self.canvas = tk.Canvas(infoReglaFrame)
-
-        scrollbar = tk.Scrollbar(
-            infoReglaFrame, orient=tk.VERTICAL, command=self.canvas.yview)
-
-        frame_canvas = tk.Frame(self.canvas)
-        frame_canvas.configure(background=style.COLOR_BACKGROUND)
-        frame_canvas.grid_columnconfigure(0, weight=1)
-        frame_canvas.grid_columnconfigure(1, weight=1)
-        self.canvas.create_window((0, 0), window=frame_canvas, anchor=tk.NW)
-        
-        self.canvas.bind('<Configure>', lambda e: frame_canvas.config(width=e.width))
-        self.canvas.configure(yscrollcommand=scrollbar.set, background=style.COLOR_BACKGROUND,
-                              borderwidth=0, highlightthickness=0)
-
-        self.canvas.bind('<Configure>', lambda e: self.canvas
-                         .configure(scrollregion=self.canvas.bbox(tk.ALL)))
-
-        self.canvas.bind("<MouseWheel>", self.movement_mouse_wheel)
-        self.canvas.bind("<Button-4>", self.movement_mouse_wheel)
-        self.canvas.bind("<Button-5>", self.movement_mouse_wheel)
-        
-
-        self.canvas.grid(
-            row=0,
-            column=0,
-            sticky=tk.NSEW,
-            pady=20,
-        )
-
-        scrollbar.grid(
-            row=0,
-            column=1,
-            sticky=tk.NS,
-            pady=20,
-        )
 
         self.dibujarTablaContingencias(frame_canvas)
         self.dibujarTablaMedidas(frame_canvas)
         self.dibujarGraficoPuntos(frame_canvas)
-        #self.dibujarPiramidePoblacion(frame_canvas)
         self.TablaDatosCubreRegla(frame_canvas)
 
 
@@ -247,20 +168,6 @@ class VisualizarInfoRegla(tk.Frame):
         # Add canvas to Tkinter window
         canvas.get_tk_widget().grid(
             row=10,
-            column=0,
-            columnspan=2,
-            sticky=tk.NSEW,
-            pady=13,
-        )
-
-    def dibujarPiramidePoblacion(self, infoReglaFrame):
-        # Create canvas
-        canvas = FigureCanvasTkAgg(self.regla.graficoBarra, master=infoReglaFrame)
-        canvas.draw()
-
-        # Add canvas to Tkinter window
-        canvas.get_tk_widget().grid(
-            row=6,
             column=0,
             columnspan=2,
             sticky=tk.NSEW,
@@ -434,6 +341,94 @@ class VisualizarInfoRegla(tk.Frame):
         fprValor.insert(tk.END, str(self.regla.fpr))
         fprValor.configure(state=tk.DISABLED, **
                           style.STYLE_TEXT, relief=tk.GROOVE,)
+        
+    def crearCabecera(self):
+        inicioFrame = tk.Frame(self)
+        inicioFrame.configure(background=style.COLOR_BACKGROUND,)
+        inicioFrame.pack(
+            side=tk.TOP,
+            fill=tk.X,
+            padx=20,
+            pady=11,
+        )
+
+        tk.Button(
+            inicioFrame,
+            text=" ← Atrás",
+            command=lambda: self.controller.get_frame("VisualizarReglas"),
+            **style.STYLE_BUTTON,
+            font=("Arial", 13)
+        ).pack(
+            side=tk.LEFT,
+            padx=20,
+            pady=11,
+        )
+
+        tk.Label(
+            inicioFrame,
+            text=self.regla.nombre,
+            justify=tk.CENTER,
+            wraplength=2000,
+            **style.STYLE_TITULO_REGLAS  # Desenpaqueta STYLE,
+        ).pack(
+            fill=tk.X,
+            padx=20,
+            pady=11,
+            side=tk.LEFT,
+        )
+    
+    def frameDatos(self):
+        infoReglaFrame = tk.Frame(self)
+        infoReglaFrame.configure(background=style.COLOR_BACKGROUND,)
+        infoReglaFrame.pack(
+            side=tk.TOP,
+            fill=tk.BOTH,
+            padx=20,
+            expand=1,
+        )
+        infoReglaFrame.grid_columnconfigure(0, weight=1)
+        infoReglaFrame.grid_rowconfigure(0, weight=1)
+
+        self.canvas = tk.Canvas(infoReglaFrame)
+
+        scrollbar = tk.Scrollbar(
+            infoReglaFrame, orient=tk.VERTICAL, command=self.canvas.yview)
+
+        frame_canvas = tk.Frame(self.canvas)
+        frame_canvas.configure(background=style.COLOR_BACKGROUND)
+        frame_canvas.grid_columnconfigure(0, weight=1)
+        frame_canvas.grid_columnconfigure(1, weight=1)
+        self.canvas.create_window((0, 0), window=frame_canvas, anchor=tk.NW)
+        
+        self.canvas.bind('<Configure>', lambda e: frame_canvas.config(width=e.width))
+        self.canvas.configure(yscrollcommand=scrollbar.set, background=style.COLOR_BACKGROUND,
+                              borderwidth=0, highlightthickness=0)
+
+        self.canvas.bind('<Configure>', lambda e: self.canvas
+                         .configure(scrollregion=self.canvas.bbox(tk.ALL)))
+
+        self.canvas.bind("<MouseWheel>", self.movement_mouse_wheel)
+        self.canvas.bind("<Button-4>", self.movement_mouse_wheel)
+        self.canvas.bind("<Button-5>", self.movement_mouse_wheel)
+        
+
+        self.canvas.grid(
+            row=0,
+            column=0,
+            sticky=tk.NSEW,
+            pady=20,
+        )
+
+        scrollbar.grid(
+            row=0,
+            column=1,
+            sticky=tk.NS,
+            pady=20,
+        )
+
+        return frame_canvas
+
+
 
 
     

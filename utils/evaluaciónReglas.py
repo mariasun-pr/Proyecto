@@ -62,5 +62,4 @@ class evaluacionReglas:
 
         for dato in dataset.datos:
             print(dato)
-            #print(dataset.reglasCubren[dataset.datos.index(dato)])
             print("\n\n")

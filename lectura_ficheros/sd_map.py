@@ -17,15 +17,6 @@ class SdMap(lecturaFicheroReglas):
             linea = lineas[i]
             linea = linea.rstrip()
 
-            #if(linea.__contains__('Target Variable')):
-            #    linea = linea.split(' ')
-            #    try:
-            #        index = linea.index('=')
-            #    except:
-            #        print("Error")
-
-            #   clase = linea[index + 1]
-
 
             if(linea.__contains__("THEN")):
                 nombreRegla = linea

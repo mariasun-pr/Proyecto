@@ -17,6 +17,9 @@ class Manager(tk.Tk):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.title("Visualizador algoritmos SD")
+        icon = tk.PhotoImage(file="assets/logo2.png")
+        self.wm_iconphoto(True, icon)
+
         # Obtener el ancho y alto de la pantalla
         ancho_pantalla = self.winfo_screenwidth()
         alto_pantalla = self.winfo_screenheight()

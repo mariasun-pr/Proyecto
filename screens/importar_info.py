@@ -43,121 +43,29 @@ class Importar(tk.Frame):
     #Método para importar el dataset
     def importarDatos(self):
         nombreFichero = tk.filedialog.askopenfilename()
-        self.filenameDatos.set(nombreFichero)
+        if(nombreFichero != ""):
+            self.filenameDatos.set(nombreFichero)
         print('Selected:', self.filenameDatos.get)
 
-        if self.filenameReglas.get() != "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ" and self.filenameReglas.get() != "":
+        if self.filenameDatos.get() != "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ" and self.filenameReglas.get() != "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ":            
             self.botonSiguiente.config(state=tk.NORMAL)
             self.leerFicheros()
 
     #Método para importat el conjunto de reglas
     def importarReglas(self):
         nombreFichero = tk.filedialog.askopenfilename()
-        self.filenameReglas.set(nombreFichero)
+        if(nombreFichero != ""):
+            self.filenameReglas.set(nombreFichero)
         print('Selected:', self.filenameReglas.get)
 
-        if self.filenameDatos.get() != "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ" and self.filenameDatos.get() != "":
+        if self.filenameDatos.get() != "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ" and self.filenameReglas.get() != "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ":
             self.botonSiguiente.config(state=tk.NORMAL)
             self.leerFicheros()
 
     def init_widgets(self):
-        #Título
-        tk.Label(
-            self,
-            text="Importa los ficheros",
-            justify=tk.CENTER,
-            **style.STYLE  # Desenpaqueta STYLE,
-        ).grid(
-            row=0,
-            column=0,
-            columnspan=2,
-            padx=20,
-            pady=11,
-            sticky=tk.NSEW,
-        )
-        self.grid_columnconfigure(0, weight=1)
-        self.grid_columnconfigure(1, weight=1)
-
-    # Importar conjunto de datos
-        datosFrame = tk.Frame(self)
-        datosFrame.configure(background=style.COLOR_BACKGROUND,)
-        datosFrame.grid(
-            row=1,
-            column=0,
-            columnspan=2,
-            padx=20,
-            pady=11,
-            sticky=tk.NSEW,
-        )
-        datosFrame.grid_columnconfigure(0, weight=1)
-        datosFrame.grid_columnconfigure(1, weight=1)
-
-        tk.Label(
-            datosFrame,
-            textvariable=self.filenameDatos,
-            **style.STYLE_TEXT,
-            width=0,
-        ).grid(
-            row=0,
-            column=0,
-            padx=20,
-            pady=11,
-            sticky=tk.NSEW,
-        )
-
-        tk.Button(
-            datosFrame,
-            text="Elija el conjunto de datos",
-            command=self.importarDatos,
-            **style.STYLE_BUTTON,
-            font=("Arial", 16)
-        ).grid(
-            row=0,
-            column=1,
-            padx=20,
-            pady=11,
-            sticky=tk.NS,
-        )
-
-    # Importar reglas
-        reglasFrame = tk.Frame(self)
-        reglasFrame.configure(background=style.COLOR_BACKGROUND,)
-        reglasFrame.grid(
-            row=2,
-            column=0,
-            columnspan=2,
-            padx=20,
-            pady=11,
-            sticky=tk.NSEW,
-        )
-        reglasFrame.grid_columnconfigure(0, weight=1)
-        reglasFrame.grid_columnconfigure(1, weight=1)
-
-        tk.Label(
-            reglasFrame,
-            textvariable=self.filenameReglas,
-            **style.STYLE_TEXT,
-        ).grid(
-            row=0,
-            column=0,
-            padx=20,
-            pady=11,
-            sticky=tk.NSEW,
-            ipadx=0
-        )
-        tk.Button(
-            reglasFrame,
-            text="Elija las reglas",
-            command=self.importarReglas,
-            **style.STYLE_BUTTON,
-            font=("Arial", 16)
-        ).grid(
-            row=0,
-            column=1,
-            padx=20,
-            pady=11,
-            sticky=tk.NS,
-        )
+        self.crearCabecera()
+        self.apartadoDatset()
+        self.apartadoReglas()
 
         # Botón siguiente
         if self.filenameDatos.get() != "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ" and self.filenameReglas.get() != "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ":
@@ -259,5 +167,106 @@ class Importar(tk.Frame):
             return algoritmo, False
         else:
             return algoritmo, True
+        
+    def crearCabecera(self):
+        #Título
+        tk.Label(
+            self,
+            text="Importa los ficheros",
+            justify=tk.CENTER,
+            **style.STYLE  # Desenpaqueta STYLE,
+        ).grid(
+            row=0,
+            column=0,
+            columnspan=2,
+            padx=20,
+            pady=11,
+            sticky=tk.NSEW,
+        )
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure(1, weight=1)
+
+    def apartadoDatset(self):
+        # Importar conjunto de datos
+        datosFrame = tk.Frame(self)
+        datosFrame.configure(background=style.COLOR_BACKGROUND,)
+        datosFrame.grid(
+            row=1,
+            column=0,
+            columnspan=2,
+            padx=20,
+            pady=11,
+            sticky=tk.NSEW,
+        )
+        datosFrame.grid_columnconfigure(0, weight=1)
+        datosFrame.grid_columnconfigure(1, weight=1)
+
+        tk.Label(
+            datosFrame,
+            textvariable=self.filenameDatos,
+            **style.STYLE_TEXT,
+            width=0,
+        ).grid(
+            row=0,
+            column=0,
+            padx=20,
+            pady=11,
+            sticky=tk.NSEW,
+        )
+
+        tk.Button(
+            datosFrame,
+            text="Elija el conjunto de datos",
+            command=self.importarDatos,
+            **style.STYLE_BUTTON,
+            font=("Arial", 16)
+        ).grid(
+            row=0,
+            column=1,
+            padx=20,
+            pady=11,
+            sticky=tk.NS,
+        )
+
+    def apartadoReglas(self):
+        # Importar reglas
+        reglasFrame = tk.Frame(self)
+        reglasFrame.configure(background=style.COLOR_BACKGROUND,)
+        reglasFrame.grid(
+            row=2,
+            column=0,
+            columnspan=2,
+            padx=20,
+            pady=11,
+            sticky=tk.NSEW,
+        )
+        reglasFrame.grid_columnconfigure(0, weight=1)
+        reglasFrame.grid_columnconfigure(1, weight=1)
+
+        tk.Label(
+            reglasFrame,
+            textvariable=self.filenameReglas,
+            **style.STYLE_TEXT,
+        ).grid(
+            row=0,
+            column=0,
+            padx=20,
+            pady=11,
+            sticky=tk.NSEW,
+            ipadx=0
+        )
+        tk.Button(
+            reglasFrame,
+            text="Elija las reglas",
+            command=self.importarReglas,
+            **style.STYLE_BUTTON,
+            font=("Arial", 16)
+        ).grid(
+            row=0,
+            column=1,
+            padx=20,
+            pady=11,
+            sticky=tk.NS,
+        )
         
 

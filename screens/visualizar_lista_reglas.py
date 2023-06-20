@@ -7,7 +7,6 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 import numpy as np
-from tkinter import filedialog
 from utils.constantes import CustomHovertip
 import zipfile
 
@@ -40,92 +39,8 @@ class VisualizarReglas(tk.Frame):
         self.canvas.yview_scroll(delta, "units")
 
     def init_widgets(self):
-        inicioFrame = tk.Frame(self)
-        inicioFrame.configure(background=style.COLOR_BACKGROUND,)
-        inicioFrame.pack(
-            side=tk.TOP,
-            fill=tk.X,
-            padx=20,
-            pady=11,
-        )
-        tk.Button(
-            inicioFrame,
-            text=" ← Atrás",
-            command=lambda: self.controller.get_frame("Importar"),
-            **style.STYLE_BUTTON,
-            font=("Arial", 13)
-        ).grid(
-            row=0,
-            column=0,
-            padx=15,
-            pady=11,
-            sticky=tk.W,
-        )
-
-        tk.Label(
-            inicioFrame,
-            text="Selecciona una regla para ver más información",
-            justify=tk.CENTER,
-            **style.STYLE  # Desenpaqueta STYLE,
-        ).grid(
-            row=0,
-            column=1,
-            pady=11,
-            sticky=tk.NSEW,
-        )
-
-        inicioFrame.grid_columnconfigure(0, weight=1)
-        inicioFrame.grid_columnconfigure(1, weight=1)
-        inicioFrame.grid_columnconfigure(2, weight=1)
-        inicioFrame.grid_columnconfigure(3, weight=1)
-
-        reglasFrame = tk.Frame(self)
-        reglasFrame.configure(background=style.COLOR_BACKGROUND,)
-        reglasFrame.pack(
-            side=tk.TOP,
-            fill=tk.BOTH,
-            padx=20,
-            # pady=11,
-            expand=1,
-        )
-        reglasFrame.grid_columnconfigure(0, weight=1)
-        reglasFrame.grid_rowconfigure(0, weight=1)
-
-        self.canvas = tk.Canvas(reglasFrame)
-
-        scrollbar = tk.Scrollbar(
-            reglasFrame, orient=tk.VERTICAL, command=self.canvas.yview)
-
-        self.canvas.configure(yscrollcommand=scrollbar.set,
-                              background=style.COLOR_BACKGROUND,
-                              borderwidth=0,
-                              highlightthickness=0)
-
-        frame_canvas = tk.Frame(self.canvas)
-        frame_canvas.configure(background=style.COLOR_BACKGROUND)
-        frame_canvas.grid_columnconfigure(0, weight=1)
-        frame_canvas.grid_columnconfigure(1, weight=1)
-
-        self.canvas.create_window((1, 1), window=frame_canvas, anchor=tk.N)
-
-        # Para que funcione el scroll con la rueda del ratón en cualquier SO
-        self.canvas.bind("<MouseWheel>", self.movement_mouse_wheel)
-        self.canvas.bind("<Button-4>", self.movement_mouse_wheel)
-        self.canvas.bind("<Button-5>", self.movement_mouse_wheel)
-
-        self.canvas.grid(
-            row=0,
-            column=0,
-            sticky=tk.NSEW,
-            pady=20,
-        )
-
-        scrollbar.grid(
-            row=0,
-            column=1,
-            sticky=tk.NS,
-            pady=20,
-        )
+        self.crearCabecera()
+        frame_canvas = self.crearInfoReglas()
 
         self.AccesoReglaIndividual(frame_canvas)
         self.DibujarGraficoPuntos(frame_canvas)
@@ -134,34 +49,6 @@ class VisualizarReglas(tk.Frame):
 
         self.canvas.bind('<Configure>', lambda e: self.canvas.configure(
             scrollregion=self.canvas.bbox(tk.ALL)))
-
-        tk.Button(
-            inicioFrame,
-            text="Exportar",
-            command=lambda: self.exportar2(),
-            **style.STYLE_BUTTON,
-            font=("Arial", 18)
-        ).grid(
-            row=0,
-            column=3,
-            padx=15,
-            pady=11,
-            sticky=tk.E,
-        )
-
-        tk.Button(
-            inicioFrame,
-            text="Info del dataset",
-            command=lambda: self.ventanaCabecera(),
-            **style.STYLE_BUTTON,
-            font=("Arial", 18)
-        ).grid(
-            row=0,
-            column=2,
-            padx=10,
-            pady=11,
-            sticky=tk.E,
-        )
 
     def AccesoReglaIndividual(self, frame_canvas):
         cont = 0
@@ -245,7 +132,6 @@ class VisualizarReglas(tk.Frame):
         canvas.get_tk_widget().grid(
             row=len(self.controller.reglas),
             column=1,
-            # columnspan=2,
             sticky=tk.NSEW,
             pady=13,
         )
@@ -346,47 +232,6 @@ class VisualizarReglas(tk.Frame):
 
             cont += 1
             contNumDatos += 1
-            tabla.append(fila_tabla)
-            # 50 el número de entradas de la tabla en una página.
-            if (contNumDatos % 50 == 0 or contNumDatos == len(self.controller.dataset.datos)):
-                # Guardar la tabla en una imagen
-                fig = plt.figure(figsize=(8.27, 12), dpi=300)
-                ax = fig.add_subplot(111)
-                ax.axis('off')
-                ax.table(cellText=tabla, cellLoc='center', loc='center')
-                self.tablaDatos.append(fig)
-                tabla = []
-
-    def exportar(self):
-        nombreFichero = self.exportacionGeneral()
-        self.exportacionReglaIndividual(nombreFichero)
-        self.ventanaNotificacion()
-
-    def exportacionGeneral(self):
-        # nombreFichero = "informacion_general_"+self.controller.nombreAlgoritmo+".pdf"
-        nombreFichero = filedialog.asksaveasfile(defaultextension=".pdf", filetypes=[("PDF Files", ".pdf"), (
-            "All files", "*.*")], initialfile="informacion_general_"+self.controller.nombreAlgoritmo+".pdf")
-        if nombreFichero:
-            with PdfPages(nombreFichero.name) as pdf:
-                pdf.savefig(self.figGraf1)
-                pdf.savefig(self.figGraf2)
-                for page in self.tablaDatos:
-                    pdf.savefig(page)
-            return nombreFichero
-
-    def exportacionReglaIndividual(self, nombreFichero):
-        nombre = nombreFichero.name.replace('.pdf', '')
-        nombre = nombre + "_reglas.pdf"
-        if nombreFichero:
-            with PdfPages(nombre) as pdf:
-                for regla in self.controller.reglas:
-                    regla.generarGraficos()
-                    pdf.savefig(regla.nombreExportar)
-                    pdf.savefig(regla.tablaContingencias)
-                    pdf.savefig(regla.graficoPuntos)
-                    pdf.savefig(regla.graficoBarra)
-                    for page in regla.tablaDatos:
-                        pdf.savefig(page)
 
     def ventanaNotificacion(self):
         ventana = tk.Toplevel()
@@ -581,7 +426,7 @@ class VisualizarReglas(tk.Frame):
             contadorDatos = 0
             for dato in regla.datosCubre:
                 latex_code +="Ejemplo "+ str(regla.numDeDatosCubre[contadorDatos]) +": "+",".join(dato)
-                latex_code += "\\hline\n"
+                latex_code += " \\\\ \\hline\n" 
                 contadorDatos+=1
             latex_code += "\\end{longtable}\n"
             latex_code += "\\newpage\n"
@@ -591,5 +436,124 @@ class VisualizarReglas(tk.Frame):
         # Guardar el código LaTeX en un archivo
         with open("infoReglas.tex", "w") as file:
             file.write(latex_code)
+
+    def crearCabecera(self):
+        inicioFrame = tk.Frame(self)
+        inicioFrame.configure(background=style.COLOR_BACKGROUND,)
+        inicioFrame.pack(
+            side=tk.TOP,
+            fill=tk.X,
+            padx=20,
+            pady=11,
+        )
+        tk.Button(
+            inicioFrame,
+            text=" ← Atrás",
+            command=lambda: self.controller.get_frame("Importar"),
+            **style.STYLE_BUTTON,
+            font=("Arial", 13)
+        ).grid(
+            row=0,
+            column=0,
+            padx=15,
+            pady=11,
+            sticky=tk.W,
+        )
+
+        tk.Label(
+            inicioFrame,
+            text="Selecciona una regla para ver más información",
+            justify=tk.CENTER,
+            **style.STYLE  # Desenpaqueta STYLE,
+        ).grid(
+            row=0,
+            column=1,
+            pady=11,
+            sticky=tk.NSEW,
+        )
+
+        tk.Button(
+            inicioFrame,
+            text="Exportar",
+            command=lambda: self.exportar2(),
+            **style.STYLE_BUTTON,
+            font=("Arial", 18)
+        ).grid(
+            row=0,
+            column=3,
+            padx=15,
+            pady=11,
+            sticky=tk.E,
+        )
+
+        tk.Button(
+            inicioFrame,
+            text="Info del dataset",
+            command=lambda: self.ventanaCabecera(),
+            **style.STYLE_BUTTON,
+            font=("Arial", 18)
+        ).grid(
+            row=0,
+            column=2,
+            padx=10,
+            pady=11,
+            sticky=tk.E,
+        )
+
+        inicioFrame.grid_columnconfigure(0, weight=1)
+        inicioFrame.grid_columnconfigure(1, weight=1)
+        inicioFrame.grid_columnconfigure(2, weight=1)
+        inicioFrame.grid_columnconfigure(3, weight=1)
+
+    def crearInfoReglas(self):
+        reglasFrame = tk.Frame(self)
+        reglasFrame.configure(background=style.COLOR_BACKGROUND,)
+        reglasFrame.pack(
+            side=tk.TOP,
+            fill=tk.BOTH,
+            padx=20,
+            # pady=11,
+            expand=1,
+        )
+        reglasFrame.grid_columnconfigure(0, weight=1)
+        reglasFrame.grid_rowconfigure(0, weight=1)
+
+        self.canvas = tk.Canvas(reglasFrame)
+
+        scrollbar = tk.Scrollbar(
+            reglasFrame, orient=tk.VERTICAL, command=self.canvas.yview)
+
+        self.canvas.configure(yscrollcommand=scrollbar.set,
+                              background=style.COLOR_BACKGROUND,
+                              borderwidth=0,
+                              highlightthickness=0)
+
+        frame_canvas = tk.Frame(self.canvas)
+        frame_canvas.configure(background=style.COLOR_BACKGROUND)
+        frame_canvas.grid_columnconfigure(0, weight=1)
+        frame_canvas.grid_columnconfigure(1, weight=1)
+
+        self.canvas.create_window((1, 1), window=frame_canvas, anchor=tk.N)
+
+        # Para que funcione el scroll con la rueda del ratón en cualquier SO
+        self.canvas.bind("<MouseWheel>", self.movement_mouse_wheel)
+        self.canvas.bind("<Button-4>", self.movement_mouse_wheel)
+        self.canvas.bind("<Button-5>", self.movement_mouse_wheel)
+
+        self.canvas.grid(
+            row=0,
+            column=0,
+            sticky=tk.NSEW,
+            pady=20,
+        )
+
+        scrollbar.grid(
+            row=0,
+            column=1,
+            sticky=tk.NS,
+            pady=20,
+        )
+
+        return frame_canvas
             
 
