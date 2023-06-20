@@ -5,7 +5,7 @@ from utils import style
 from screens.regla_screen import *
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_pdf import PdfPages
+import matplotlib.backends.backend_svg
 import numpy as np
 from utils.constantes import CustomHovertip
 import zipfile
