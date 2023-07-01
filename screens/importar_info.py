@@ -139,8 +139,8 @@ class Importar(tk.Frame):
             return True
         
         elif(salidaDataset == "Discretizado"):
-            MessageBox.showerror(
-                "Error", "El conjunto de datos está discretizado y el algoritmo no lo necesita")
+            MessageBox.showwarning(
+                "Warning", "El conjunto de datos está discretizado y el algoritmo no lo necesita")
             self.botonSiguiente.config(state=tk.DISABLED)
             return True
 

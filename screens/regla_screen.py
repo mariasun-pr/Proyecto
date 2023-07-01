@@ -79,7 +79,7 @@ class VisualizarInfoRegla(tk.Frame):
         )
         tpValor.insert(tk.END, str(self.regla.tp))
         tpValor.configure(state=tk.DISABLED, **
-                          style.STYLE_TEXT, relief=tk.GROOVE,)
+                          style.STYLE_REGLA_BIEN, relief=tk.GROOVE,)
 
         tn = tk.Entry(
             infoReglaFrame,
@@ -132,7 +132,7 @@ class VisualizarInfoRegla(tk.Frame):
         )
         fpValor.insert(tk.END, str(self.regla.fp))
         fpValor.configure(state=tk.DISABLED, **
-                          style.STYLE_TEXT, relief=tk.GROOVE,)
+                          style.STYLE_REGLA_MAL, relief=tk.GROOVE,)
 
         fn = tk.Entry(
             infoReglaFrame,

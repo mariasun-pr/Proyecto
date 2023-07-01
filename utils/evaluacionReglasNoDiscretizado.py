@@ -20,21 +20,20 @@ class evaluacionReglasNoDiscretizado:
                 contDato += 1
                 contOcurrencias = 0
                 contValoresAtributosRegla = 0
-                calculoTotal = 0
+                calculoFinal = 1000
                 for i in range(len(regla.atributos)):
                     if (regla.atributos[i] != None):
                         contValoresAtributosRegla += 1
-                        etiqueta, calculo = self.funcionPertenencia(
-                            intervalos[i], dato[i])
-                        if (regla.atributos[i] == str(etiqueta)):
+                        etiqueta, calculo = self.funcionPertenencia(intervalos[i], dato[i])
+                        if (regla.atributos[i] == str(etiqueta)and calculo >= 0.5):
                             contOcurrencias += 1
-                            calculoTotal = calculo + calculoTotal
+                            if(calculo < calculoFinal):
+                                calculoFinal = calculo
 
-                calculoTotal = calculoTotal/contValoresAtributosRegla
                 if (dato[len(regla.atributos)] == regla.clase):
                     if (contOcurrencias == contValoresAtributosRegla):
                         truePositive += 1
-                        dataset.anadirRegla(dato, regla, True, round(calculoTotal, 2))
+                        dataset.anadirRegla(dato, regla, True, round(calculoFinal, 2))
                         regla.datosCubre.append(dato)
                         regla.colorDatosCubre.append("blue")
                         regla.numDeDatosCubre.append(contDato)
@@ -45,7 +44,7 @@ class evaluacionReglasNoDiscretizado:
                 if (dato[len(regla.atributos)] != regla.clase):
                     if (contOcurrencias == contValoresAtributosRegla):
                         falsePositive += 1
-                        dataset.anadirRegla(dato, regla, False, round(calculoTotal, 2))
+                        dataset.anadirRegla(dato, regla, False, round(calculoFinal, 2))
                         regla.datosCubre.append(dato)
                         regla.colorDatosCubre.append("red")
                         regla.numDeDatosCubre.append(contDato)
