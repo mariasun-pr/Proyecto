@@ -19,7 +19,7 @@ class Home(tk.Frame):
         #Título
         tk.Label(
             self,
-            text="Visualizador de algoritmos SDRD",
+            text="SDRD Algorithms Viewer",
             justify=tk.CENTER,
             **style.STYLE  # Desenpaqueta STYLE,
         ).pack(
@@ -47,7 +47,7 @@ class Home(tk.Frame):
         #Botón de inicio
         tk.Button(
             self,
-            text="Nueva visualización",
+            text="New visualization",
             command=self.move_to_importar,
             **style.STYLE_BUTTON,
             font=style.FONT_BUTTON,

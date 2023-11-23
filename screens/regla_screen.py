@@ -42,7 +42,7 @@ class VisualizarInfoRegla(tk.Frame):
     def dibujarTablaContingencias(self, infoReglaFrame):
         tk.Label(            
             infoReglaFrame,
-            text="Tabla de contingencias",
+            text="Contingency table",
             justify=tk.CENTER,
             **style.STYLE_TITULO_REGLAS  # Desenpaqueta STYLE,
         ).grid(
@@ -185,7 +185,7 @@ class VisualizarInfoRegla(tk.Frame):
             sticky=tk.NSEW,
             columnspan=2
         )
-        tituloTabla.insert(tk.END, "Datos que cubre la regla")
+        tituloTabla.insert(tk.END, "Data covered by the rule")
         tituloTabla.configure(state=tk.DISABLED, **
                      style.STYLE_TITULO_TABLA, relief=tk.GROOVE,)
         
@@ -202,7 +202,7 @@ class VisualizarInfoRegla(tk.Frame):
                 sticky=tk.NSEW,
                 columnspan=2
             )
-            texto = "Ejemplo "+ str(self.regla.numDeDatosCubre[contadorDatos]) +": "+",".join(dato)
+            texto = "Example "+ str(self.regla.numDeDatosCubre[contadorDatos]) +": "+",".join(dato)
             entradaTabla.insert(tk.END, texto)
             color = self.regla.colorDatosCubre[contadorDatos]
             if(color == "blue"):
@@ -212,7 +212,7 @@ class VisualizarInfoRegla(tk.Frame):
                 entradaTabla.configure(state=tk.DISABLED, **
                     style.STYLE_REGLA_MAL, relief=tk.GROOVE,)
                 
-            infoDelDato = "Ejemplo: " + str(self.regla.numDeDatosCubre[contadorDatos]) + "\n"
+            infoDelDato = "Example: " + str(self.regla.numDeDatosCubre[contadorDatos]) + "\n"
             for i in range(len(self.controller.dataset.atributos)):
                 infoDelDato = infoDelDato + \
                     self.controller.dataset.atributos[i]+": "+dato[i]+"\n"
@@ -224,7 +224,7 @@ class VisualizarInfoRegla(tk.Frame):
     def dibujarTablaMedidas(self, infoReglaFrame):
         tk.Label(            
             infoReglaFrame,
-            text="Tabla de medidas (%)",
+            text="Table of measures (%)",
             justify=tk.CENTER,
             **style.STYLE_TITULO_REGLAS  # Desenpaqueta STYLE,
         ).grid(
@@ -354,7 +354,7 @@ class VisualizarInfoRegla(tk.Frame):
 
         tk.Button(
             inicioFrame,
-            text=" ← Atrás",
+            text=" ← Back",
             command=lambda: self.controller.get_frame("VisualizarReglas"),
             **style.STYLE_BUTTON,
             font=("Arial", 13)

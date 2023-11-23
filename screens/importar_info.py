@@ -20,10 +20,10 @@ class Importar(tk.Frame):
         self.configure(background=style.COLOR_BACKGROUND)
         self.controller = controller
         self.filenameDatos = tk.StringVar(self, "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ")
-        self.filenameReglas = tk.StringVar(self, "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ")
+        self.filenameReglas = tk.StringVar(self, "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ")
         self.botonSiguiente = tk.Button(
             self,
-            text="Siguiente →",
+            text="Next →",
             command=self.move_to_visualizarReglas,
             **style.STYLE_BUTTON,
             font=style.FONT_BUTTON,
@@ -47,7 +47,7 @@ class Importar(tk.Frame):
             self.filenameDatos.set(nombreFichero)
         print('Selected:', self.filenameDatos.get)
 
-        if self.filenameDatos.get() != "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ" and self.filenameReglas.get() != "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ":            
+        if self.filenameDatos.get() != "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ" and self.filenameReglas.get() != "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ":            
             self.botonSiguiente.config(state=tk.NORMAL)
             self.leerFicheros()
 
@@ -58,7 +58,7 @@ class Importar(tk.Frame):
             self.filenameReglas.set(nombreFichero)
         print('Selected:', self.filenameReglas.get)
 
-        if self.filenameDatos.get() != "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ" and self.filenameReglas.get() != "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ":
+        if self.filenameDatos.get() != "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ" and self.filenameReglas.get() != "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ":
             self.botonSiguiente.config(state=tk.NORMAL)
             self.leerFicheros()
 
@@ -68,7 +68,7 @@ class Importar(tk.Frame):
         self.apartadoReglas()
 
         # Botón siguiente
-        if self.filenameDatos.get() != "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ" and self.filenameReglas.get() != "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ":
+        if self.filenameDatos.get() != "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ" and self.filenameReglas.get() != "ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ":
             self.estadoBoton = tk.NORMAL
         self.botonSiguiente.grid(
             row=3,
@@ -116,31 +116,31 @@ class Importar(tk.Frame):
     def comprobacionErroresLectura(self, algoritmo, salidaDataset):
         if(algoritmo == 'error'):
             MessageBox.showerror(
-                "Error", "El fichero de reglas no es correcto")
+                "Error", "The rules file is not correct")
             self.botonSiguiente.config(state=tk.DISABLED)
             return True
 
         if(algoritmo not in ALGORITMOS_VALIDOS):
             MessageBox.showerror(
-                "Error", "El algoritmo no está registrado en la aplicación")
+                "Error", "The algorithm is not registered in the application")
             self.botonSiguiente.config(state=tk.DISABLED)
             return True
 
         if(salidaDataset == "No discretizado"):
             MessageBox.showerror(
-                "Error", "El algoritmo necesita el conjunto de datos discretizado")
+                "Error", "The algorithm needs the discretised dataset")
             self.botonSiguiente.config(state=tk.DISABLED)
             return True
         
         elif(salidaDataset == "Formato incorrecto"):
             MessageBox.showerror(
-                "Error", "El formato del contenido del archivo es incorrecto")
+                "Error", "Dataset file format is incorrect")
             self.botonSiguiente.config(state=tk.DISABLED)
             return True
         
         elif(salidaDataset == "Discretizado"):
             MessageBox.showwarning(
-                "Warning", "El conjunto de datos está discretizado y el algoritmo no lo necesita")
+                "Warning", "The dataset is discretised and the algorithm does not need it.")
             self.botonSiguiente.config(state=tk.DISABLED)
             return True
 
@@ -172,7 +172,7 @@ class Importar(tk.Frame):
         #Título
         tk.Label(
             self,
-            text="Importa los ficheros",
+            text="Import the files",
             justify=tk.CENTER,
             **style.STYLE  # Desenpaqueta STYLE,
         ).grid(
@@ -216,7 +216,7 @@ class Importar(tk.Frame):
 
         tk.Button(
             datosFrame,
-            text="Elija el conjunto de datos",
+            text="Choose the dataset",
             command=self.importarDatos,
             **style.STYLE_BUTTON,
             font=("Arial", 16)
@@ -257,7 +257,7 @@ class Importar(tk.Frame):
         )
         tk.Button(
             reglasFrame,
-            text="Elija las reglas",
+            text="Choose the rules",
             command=self.importarReglas,
             **style.STYLE_BUTTON,
             font=("Arial", 16)

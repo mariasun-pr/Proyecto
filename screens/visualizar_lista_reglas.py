@@ -121,7 +121,7 @@ class VisualizarReglas(tk.Frame):
                            '0', '20', '40', '60', '80', '100'])
 
         ax.set_xlabel('FPr y TPr')
-        ax.set_title('Pirámide FPr/TPr')
+        ax.set_title('Pyramid FPr/TPr')
         plt.yticks([])
 
         # Create canvas
@@ -161,7 +161,7 @@ class VisualizarReglas(tk.Frame):
             sticky=tk.NSEW,
             columnspan=3
         )
-        tituloTabla.insert(tk.END, "Reglas que cubren a cada dato")
+        tituloTabla.insert(tk.END, "Rules covering each data")
         tituloTabla.configure(state=tk.DISABLED, **
                               style.STYLE_TITULO_TABLA, relief=tk.GROOVE,)
 
@@ -179,7 +179,7 @@ class VisualizarReglas(tk.Frame):
                 column=0,
                 sticky=tk.NSEW,
             )
-            texto = "Ejemplo " + \
+            texto = "Example " + \
                 str(contNumDatos+1) + ": " + \
                     self.controller.dataset.datosFormateados[contNumDatos]
             entradaTabla.insert(tk.END, texto)
@@ -187,7 +187,7 @@ class VisualizarReglas(tk.Frame):
                                    style.STYLE_TEXT, relief=tk.GROOVE,)
             fila_tabla.append(entradaTabla.get())
 
-            infoDelDato = "Ejemplo: " + str(contNumDatos+1) + "\n"
+            infoDelDato = "Example: " + str(contNumDatos+1) + "\n"
             for i in range(len(self.controller.dataset.atributos)):
                 infoDelDato = infoDelDato + \
                     self.controller.dataset.atributos[i]+": "+dato[i]+"\n"
@@ -251,7 +251,7 @@ class VisualizarReglas(tk.Frame):
         ventana.geometry("+{}+{}".format(x, y))
 
         # Crear un label con el mensaje de notificación
-        tk.Label(ventana, text="Ha finalizado la exportación",
+        tk.Label(ventana, text="Export has been completed",
                  font=("Arial", 12)).pack(pady=10)
 
         # Configurar la ventana de notificación para que desaparezca en 3 segundos
@@ -263,10 +263,10 @@ class VisualizarReglas(tk.Frame):
     def ventanaCabecera(self):
         ventana = tk.Toplevel()
         # Establecer el título de la ventana
-        ventana.title("Cabecera del dataset")
+        ventana.title("Dataset header")
 
         # Crear labels con la información de la cabecera
-        tk.Label(ventana, text="Cabecera del dataset",
+        tk.Label(ventana, text="Dataset header",
                  font=("Arial", 18, "bold")).pack(pady=10)
         tk.Label(ventana, text=self.controller.dataset.cabecera,
                  font=("Arial", 14)).pack()
@@ -294,20 +294,20 @@ class VisualizarReglas(tk.Frame):
 
     def exportar2(self):
         nombreFichero = filedialog.asksaveasfile(defaultextension=".zip", filetypes=[("ZIP Files", ".zip"), (
-            "All files", "*.*")], initialfile="informacion_general_"+self.controller.nombreAlgoritmo+".zip")
+            "All files", "*.*")], initialfile="general_information_"+self.controller.nombreAlgoritmo+".zip")
         if nombreFichero:
-            self.figGraf1.savefig('graficaPuntos.svg', format='svg')
-            self.figGraf2.savefig('graficaPiramide.svg', format='svg')
+            self.figGraf1.savefig('dotsGraph.svg', format='svg')
+            self.figGraf2.savefig('pyramidGraph.svg', format='svg')
             self.exportarToLatexGeneral()
             self.exportarReglas()
 
             with zipfile.ZipFile(nombreFichero.name, 'w') as zipf:
                 # Agregar los archivos SVG al ZIP
-                zipf.write('graficaPuntos.svg')
-                zipf.write('graficaPiramide.svg')
+                zipf.write('dotsGraph.svg')
+                zipf.write('pyramidGraph.svg')
 
                 zipf.write('infoGeneral.tex')
-                zipf.write('infoReglas.tex')
+                zipf.write('infoRules.tex')
                 zipf.close()
 
             self.ventanaNotificacion()
@@ -323,23 +323,23 @@ class VisualizarReglas(tk.Frame):
         latex_code +="\\geometry{left=2cm}\n"
         latex_code += "\\begin{document}\n"
         
-        latex_code += "\\section*{Cabecera del dataset}\n"
+        latex_code += "\\section*{Dataset header}\n"
 
         # Agregar el texto encima de la tabla
         latex_code += self.controller.dataset.cabecera.replace("\n", " \\\\\n")
 
         # Agregar los gráficos encima de la tabla
-        latex_code += "\\section*{Graficas}\n"
+        latex_code += "\\section*{Graphs}\n"
         latex_code += "\\begin{figure}[htbp]\n"
         latex_code += "\\centering\n"
-        latex_code += "\\includesvg[width=1.2\linewidth]{graficaPuntos.svg}\n"
+        latex_code += "\\includesvg[width=1.2\linewidth]{dotsGraph.svg}\n"
         latex_code += "\\end{figure}\n\n"
         latex_code += "\\begin{figure}[htbp]\n"
-        latex_code += "\\includesvg[width=1.2\linewidth]{graficaPiramide.svg}\n"
+        latex_code += "\\includesvg[width=1.2\linewidth]{pyramidGraph.svg}\n"
         latex_code += "\\end{figure}\n\n"
 
         latex_code += "\\newpage\n"
-        latex_code += "\\section*{Tabla de las reglas que cubren a los datos}\n"
+        latex_code += "\\section*{Table of rules covering the data}\n"
         # Agregar la tabla
         latex_code += "\\begin{longtable}{|c|c|c|c|c|c|c|c|}\n"
         latex_code += "\\hline\n"
@@ -348,7 +348,7 @@ class VisualizarReglas(tk.Frame):
         for i in range(-1, len(self.controller.dataset.datos)):
             # Recorrer las columnas de cada fila
             if (i == -1):
-                latex_code += "Ej & " + self.controller.dataset.atributos[0] + " & " + self.controller.dataset.atributos[1] + " & ... & Clase & Cubren BIEN & Cubren MAL"
+                latex_code += "Ex & " + self.controller.dataset.atributos[0] + " & " + self.controller.dataset.atributos[1] + " & ... & Class & Cover GOOD & Cover BAD"
             else:
                 dato = self.controller.dataset.datos[i]
                 for col in range(0, 4):
@@ -394,7 +394,7 @@ class VisualizarReglas(tk.Frame):
 
         for regla in self.controller.reglas:
             latex_code += "\\section*{" + regla.nombre + "}\n"
-            latex_code += "\\subsection*{Tabla de contingencias}\n"
+            latex_code += "\\subsection*{Contingency table}\n"
             latex_code += "\\begin{longtable}{|c|c|}\n"
             latex_code += "\\hline\n"
             latex_code += "True positive (tp) & False positive(fp)" 
@@ -407,7 +407,7 @@ class VisualizarReglas(tk.Frame):
             latex_code += " \\\\ \\hline\n" 
             latex_code += "\\end{longtable}\n"
 
-            latex_code += "\\subsection*{Tabla de medidas (\%)}\n"
+            latex_code += "\\subsection*{Table of measures (\%)}\n"
             latex_code += "\\begin{longtable}{|c|c|}\n"
             latex_code += "\\hline\n"
             latex_code += "Conf & WRAccN" 
@@ -420,12 +420,12 @@ class VisualizarReglas(tk.Frame):
             latex_code += " \\\\ \\hline\n" 
             latex_code += "\\end{longtable}\n"
 
-            latex_code += "\\subsection*{Tabla de los datos que cubre}\n"
+            latex_code += "\\subsection*{Table of data covered}\n"
             latex_code += "\\begin{longtable}{|c|}\n"
             latex_code += "\\hline\n"
             contadorDatos = 0
             for dato in regla.datosCubre:
-                latex_code +="Ejemplo "+ str(regla.numDeDatosCubre[contadorDatos]) +": "+",".join(dato)
+                latex_code +="Example "+ str(regla.numDeDatosCubre[contadorDatos]) +": "+",".join(dato)
                 latex_code += " \\\\ \\hline\n" 
                 contadorDatos+=1
             latex_code += "\\end{longtable}\n"
@@ -434,7 +434,7 @@ class VisualizarReglas(tk.Frame):
         latex_code += "\\end{document}"
         
         # Guardar el código LaTeX en un archivo
-        with open("infoReglas.tex", "w") as file:
+        with open("infoRules.tex", "w") as file:
             file.write(latex_code)
 
     def crearCabecera(self):
@@ -448,7 +448,7 @@ class VisualizarReglas(tk.Frame):
         )
         tk.Button(
             inicioFrame,
-            text=" ← Atrás",
+            text=" ← Back",
             command=lambda: self.controller.get_frame("Importar"),
             **style.STYLE_BUTTON,
             font=("Arial", 13)
@@ -462,7 +462,7 @@ class VisualizarReglas(tk.Frame):
 
         tk.Label(
             inicioFrame,
-            text="Selecciona una regla para ver más información",
+            text="Select a rule for more information",
             justify=tk.CENTER,
             **style.STYLE  # Desenpaqueta STYLE,
         ).grid(
@@ -474,7 +474,7 @@ class VisualizarReglas(tk.Frame):
 
         tk.Button(
             inicioFrame,
-            text="Exportar",
+            text="Export",
             command=lambda: self.exportar2(),
             **style.STYLE_BUTTON,
             font=("Arial", 18)
@@ -488,7 +488,7 @@ class VisualizarReglas(tk.Frame):
 
         tk.Button(
             inicioFrame,
-            text="Info del dataset",
+            text="Dataset info",
             command=lambda: self.ventanaCabecera(),
             **style.STYLE_BUTTON,
             font=("Arial", 18)
