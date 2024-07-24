@@ -23,3 +23,7 @@ To discover how to include new algorithms in the application, click [here](Manua
 - General implementations for the entire application, such as rule evaluation, constants, style, and the rule class, can be found in the `utils` directory.
 - The `main.py` file initiates the application.
 - The `Manager.py` file handles window transitions within the application.
+
+## Annex
+Additionally, you can find the project at: [![DOI](https://zenodo.org/badge/599206479.svg)](https://zenodo.org/doi/10.5281/zenodo.12811990)
+
