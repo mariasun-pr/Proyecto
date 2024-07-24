@@ -2,6 +2,9 @@
 
 SDRDPy is an application designed for graphically visualizing knowledge obtained through supervised descriptive rule algorithms.
 
+## Requirements 
+The required version of Windows is 10 or later, and it is only for 64-bit devices. It is a lightweight tool, so a powerful RAM and CPU are **not** necessary.
+
 ## Installation Manual
 To learn how to install the application, click [here](Manuals/Installation_Manual.md).
 
